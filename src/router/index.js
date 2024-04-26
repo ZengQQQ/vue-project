@@ -13,7 +13,7 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home,
-    meta: { requiresAuth: true } // 添加元信息标记需要验证
+    meta: { requiresAuth: false } // 添加元信息标记需要验证
   },
   // 添加更多的路由规则
   {
@@ -21,8 +21,13 @@ const routes = [
     name: 'Register',
     component: () => import('@/views/Register.vue'),
     meta: { requiresAuth: false }
-  }
-
+  },
+{
+  path:'/test',
+  name:'Test',
+  component:()=>import('@/views/test.vue'),
+  meta:{requiresAuth:false}
+}
 ]
 
 const router = createRouter({

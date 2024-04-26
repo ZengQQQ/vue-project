@@ -2,3 +2,10 @@ element-plus
 axios
 vue-router@4
 npm install
+npm install vue3-particles tsparticles
+npm install tsparticles-engine
+
+
+
+npm install @tsparticles/
+npm install gsap
