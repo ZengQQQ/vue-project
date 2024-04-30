@@ -6,7 +6,7 @@
         <strong>竞技联盟</strong>
       </p>
 
-      <div class="menu-links" @click="toggleMenu" :class="{ 'bg-scrolling': isNavbarActive }">
+      <!-- <div class="menu-links" @click="toggleMenu" :class="{ 'bg-scrolling': isNavbarActive }">
           <el-menu
           default-active="1"
           class="el-menu-demo"
@@ -15,13 +15,14 @@
         >
           <el-menu-item index="1">主页</el-menu-item>
           <el-menu-item index="2">工作中心</el-menu-item>
-          <!-- 创建工作（编辑任务，发布为工作），工作广场（查看已有工作，可以进行承接，但要有自己的队伍）。工作通知（申请的队伍） -->
-          <el-menu-item index="3">组队管理</el-menu-item>
-          <!-- 队伍广场，队员搜索，队伍管理-->
-          <el-menu-item index="4">个人信息</el-menu-item>
-          <!--个人信息，我的队伍，消息通知：（队伍申请，工作申请）  -->
+          <-- 创建工作（编辑任务，发布为工作），工作广场（查看已有工作，可以进行承接，但要有自己的队伍）。工作通知（申请的队伍） -->
+          <!-- <el-menu-item index="3">组队管理</el-menu-item> -->
+          <!-- 队伍广场，查找队员，队伍管理，组队申请-->
+          <!-- <el-menu-item index="4">个人信息</el-menu-item> -->
+          <!--个人信息，我的队伍，消息通知：（队伍申请，工作申请）  
         </el-menu>
-      </div>
+      </div> 
+    -->
     </div>
   </nav>
 </template>
@@ -36,9 +37,9 @@ export default {
   },
   components: {},
   methods: {
-    handleMenuItemClick(activeIndex) {
-      this.$emit("handleMenuItemClick", activeIndex);
-    },
+    // handleMenuItemClick(activeIndex) {
+    //   this.$emit("handleMenuItemClick", activeIndex);
+    // },
     handleScroll() {
       let scrollPos = window.scrollY || window.pageYOffset;
 

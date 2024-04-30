@@ -9,3 +9,8 @@ npm install tsparticles-engine
 
 npm install @tsparticles/
 npm install gsap
+
+npm install pinia
+npm install pinia-persistedstate-plugin
+
+npm install -D sass

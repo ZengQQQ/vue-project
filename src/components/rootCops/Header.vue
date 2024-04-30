@@ -11,17 +11,19 @@
         <span class="line">Team UP<span class="color">&</span>Fight!</span>
       </h1>
       <div class="buttons">
-        <a href="#projects">my portfolio</a>
-        <a href="#contact" class="cta">get in touch</a>
+        <!-- <a href="#projects">my portfolio</a> -->
+        <router-link to="/login">login</router-link>
+        <router-link to="/register" class="cta">register</router-link>
+        <!-- <a href="#contact" class="cta">get in touch</a> -->
       </div>
     </div>
   </header>
 </template>
 
-<script>
-export default {
-  props: {},
-};
+<script setup>
+import { useRoute } from 'vue-router';
+const router = useRoute();
+
 </script>
 
 <style scoped>
@@ -39,7 +41,8 @@ export default {
 #welcome-section::before {
   content: '';
   position: fixed;
-  background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Stars.svg?sanitize=true);
+  /* background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Stars.svg?sanitize=true); */
+  background: url(@/assets/imgs/Stars.svg);
   background-attachment: fixed;
   width: 100%;
   min-height: 100vh;
@@ -62,7 +65,8 @@ export default {
   position: absolute;
   bottom: -300px;
   left: 0;
-  background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Trees.svg?sanitize=true) bottom left repeat-x;
+  /* background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Trees.svg?sanitize=true) bottom left repeat-x; */
+  background: url(@/assets/imgs/Trees.svg;) bottom left repeat-x;
   background-size: cover;
   width: 100%;
   height: 80%;
@@ -85,7 +89,8 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Silhouette.svg?sanitize=true) bottom left no-repeat;
+  /* background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Silhouette.svg?sanitize=true) bottom left no-repeat; */
+  background: url(@/assets/imgs/Silhouette.svg) bottom left no-repeat;
   width: 50%;
   height: 50%;
   opacity: 0;
@@ -107,7 +112,8 @@ export default {
   top: 0;
   right: 0;
   position: fixed;
-  background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Moon.svg?sanitize=true) right 150% no-repeat;
+  /* background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Moon.svg?sanitize=true) right 150% no-repeat; */
+  background: url(@/assets/imgs/Moon.svg) right 150% no-repeat;
   background-size: 40% 40%;
   background-attachment: fixed;
   width: 100%;

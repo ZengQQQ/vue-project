@@ -29,7 +29,7 @@ const switchRole = (newRole) => {
 };
 
 const backToLogin = () => {
-  router.push('/'); // 导航到登录页面
+  router.push('/login'); // 导航到登录页面
 };
 </script>
 

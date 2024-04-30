@@ -6,9 +6,10 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import Particles from "@tsparticles/vue3";
 import { loadFull } from 'tsparticles';
+import { createPinia } from 'pinia';
+import { createPersistedState } from 'pinia-persistedstate-plugin';
 // 创建 Vue 应用实例
 const app = createApp(App);
-
 
 
 // 使用 ElementPlus UI 框架
@@ -23,5 +24,11 @@ app.use(Particles,{
         await loadFull(engine);
     }
 });
+
+// 使用 Pinia
+const pinia = createPinia();
+pinia.use(createPersistedState());
+app.use(pinia);
+
 // 将 Vue 应用挂载到 DOM 中的 '#app' 元素上
 app.mount('#app');

@@ -1,10 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login.vue'
-import Home from '@/views/Home.vue'
 
 const routes = [
   {
     path: '/',
+    name: 'Root',
+    component:()=>import('@/views/root.vue'),
+    meta: { requiresAuth: false }, // 添加元信息标记不需要验证
+  },
+  {
+    path: '/login',
     name: 'Login',
     component: Login,
     meta: { requiresAuth: false } // 添加元信息标记不需要验证
@@ -12,8 +17,23 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Home,
-    meta: { requiresAuth: false } // 添加元信息标记需要验证
+    component: () => import('@/views/Layout.vue'),
+    meta: { requiresAuth: false }, // 添加元信息标记需要验证
+    children:[
+      //workcenter
+      {path:'/work/workGround',component:()=>import('@/components/workcenter/WorkGround.vue'),meta:{requiresAuth:false}},
+      {path:'/work/workInform',component:()=>import('@/components/workcenter/WorkInform.vue'),meta:{requiresAuth:false}},
+      {path:'/work/workManage',component:()=>import('@/components/workcenter/WorkManage.vue'),meta:{requiresAuth:false}},
+
+      //Teamcenter
+      {path:'/team/teamGround',component:()=>import('@/components/teamcenter/TeamGround.vue'),meta:{requiresAuth:false}},
+      {path:'/team/teamMange',component:()=>import('@/components/teamcenter/TeamManage.vue'),meta:{requiresAuth:false}},
+      {path:'/team/teamInform',component:()=>import('@/components/teamcenter/TeamInform.vue'),meta:{requiresAuth:false}},
+    
+      //personalcenter
+      {path:'/user/personalManage',component:()=>import('@/components/personal/PersonInfo.vue'),meta:{requiresAuth:false}},
+      
+    ]
   },
   // 添加更多的路由规则
   {
@@ -37,23 +57,23 @@ const router = createRouter({
 
 
 // 导航守卫
-router.beforeEach((to, from, next) => {
+// router.beforeEach((to, from, next) => {
   // 假设有一个函数可以检查用户是否登录
-  const isAuthenticated = checkAuth();
-  // 检查路由是否需要认证
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
-      // 用户未认证，重定向到登录页
-      next({ name: 'Login' });
-    } else {
-      // 用户已认证，继续
-      next();
-    }
-  } else {
-    // 路由不需要认证，直接继续
-    next();
-  }
-});
+  // const isAuthenticated = checkAuth();
+  // // 检查路由是否需要认证
+  // if (to.matched.some(record => record.meta.requiresAuth)) {
+  //   if (!isAuthenticated) {
+  //     // 用户未认证，重定向到登录页
+  //     next({ name: 'Login' });
+  //   } else {
+  //     // 用户已认证，继续
+  //     next();
+  //   }
+  // } else {
+  //   // 路由不需要认证，直接继续
+  //   next();
+  // }
+// });
 
 
 function checkAuth() {

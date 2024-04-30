@@ -1,11 +1,3 @@
-<!-- <script setup>
-import HomePage from "@/views/Home.vue";
-</script>
-<template>
-  <HomePage />
-</template>
-<style scoped>
-</style> -->
 <template>
   <div id="app">
     <router-view></router-view>

@@ -1,11 +1,11 @@
 <template>
-  <el-footer class="footer">
+  <footer class="footer">
     <div class="wrapper">
       <h3>THANKS FOR VISITING</h3>
       <p>© {{ getCurrentYear() }} 竞技联盟-团队</p>
       <SocialLinks />
     </div>
-  </el-footer>
+  </footer>
 </template>
 
 <script>

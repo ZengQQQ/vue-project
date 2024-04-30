@@ -1,5 +1,5 @@
 <script setup>
-import TestVue from "@/views/root.vue";
+import TestVue from "@/views/Layout.vue";
 
 </script>
 

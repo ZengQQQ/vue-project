@@ -1,25 +1,29 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router"; // 引入 useRouter
-import { ElForm } from "element-plus";
+import { ElForm, ElMessage } from "element-plus";
 import LoginService from "@/api/LoginService"; // 引入登录接口
 import CustomeParticles from "@/components/particles/ParticlesCustomer.vue"; // 引入粒子效果组件
-
+import { useTokenStore } from "@/stores/token.js";
 
 const router = useRouter(); // 使用 useRouter
-const username = ref("");
+const account = ref("");
 const password = ref("");
 const identify = ref("student");
+
+const tokenStore = useTokenStore();
 
 async function loginProcess() {
   try {
     const res = await LoginService.login(
-      username.value,
+      account.value,
       password.value,
       identify.value
     );
-    if (res.loginSuccess) {
-      alert("登录成功");
+    console.log(res);
+    if (res.code === 200) {
+      ElMessage.success("登录成功");
+      tokenStore.setToken(res);
       router.push("/home");
     } else {
       alert("登录失败,请检查账号密码是否正确");
@@ -30,7 +34,7 @@ async function loginProcess() {
 }
 
 function reset() {
-  username.value = "";
+  account.value = "";
   password.value = "";
   identify.value = "student";
 }
@@ -48,7 +52,7 @@ function reset() {
           </el-form-item>
           <div class="restOFform">
           <el-form-item id="usernameInput" class="text" label="账号">
-            <el-input v-model="username" style="margin: auto; width:300px;"/>
+            <el-input v-model="account" style="margin: auto; width:300px;"/>
           </el-form-item> 
           <el-form-item  id="passwordInput" class="text" label="密码">
             <el-input type="password" v-model="password" style="margin: auto;width: 300px;" />

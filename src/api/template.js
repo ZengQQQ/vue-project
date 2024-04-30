@@ -1,9 +1,11 @@
 // userService.js
 import baseApi from './baseUrl';
+import { useTokenStore } from '@/stores/token';
 
 const userService = {
   getUser(id) {
-    return baseApi.get(`users/${id}`);
+    const tokenStore = useTokenStore();
+    return baseApi.get(`users/${id}`,{headers: { 'Authorization': tokenStore.token}});
   },
   createUser(data) {
     return baseApi.post('users', data);
