@@ -1,5 +1,6 @@
 <template>
 
+
   <div class="table">
     <el-table :data="tableData" stripe>
       <el-table-column prop="u_id" label="ID"></el-table-column>
@@ -14,7 +15,7 @@
       <el-table-column prop="u_status" label="Status"></el-table-column>
       <el-table-column prop="u_power" label="Power"></el-table-column>
       <el-table-column prop="u_identity" label="Identity"></el-table-column>
-      <el-table-column label="操作" width="230">
+      <el-table-column label="操作" width="400">
         <template #default="{ row }">
           <el-button size="default" @click="editUser(row)">编辑</el-button>
           <el-button size="default" @click="deleteUser(row)" type="danger">删除</el-button>
@@ -52,6 +53,13 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="用户身份">
+          <el-select v-model="currentData.u_identity">
+            <el-option label="学生" :value="0"></el-option>
+            <el-option label="教师" :value="1"></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="用户电话">
           <el-input v-model.trim="currentData.u_tele"></el-input>
         </el-form-item>
@@ -79,24 +87,38 @@
 
 <script setup>
 import { ref } from 'vue'
-import { test,fetch,fetchAll } from './useM'
+import { deleteApi, updateApi, fetchApi, fetchAllApi } from './useM'
+
 // 表格数据
-
-const resp = fetchAll(1);
-
-
-console.log("resp");
-console.log(resp);
-
-console.log("resp.data");
-console.log(resp.code);
+let tableData = ref()
+fetchAllApi(1).then(res => {
+  let data = res.data;
+  console.log(data);
+  let cpage = data.currentPage;
+  tableData.value = data.listPage;
+});
 
 // 状态控制
 let showEditDialog = ref(false);
-
+let showAddDialog = ref(false);
 // 数据传递
 let currentData = ref(null);
 const originData = ref({});
+
+
+
+// 添加方法
+function addUser() {
+  // 添加方法
+  console.log('添加');
+  // 弹窗
+  showEditDialog.value = true;
+  // 清空数据
+  currentData.value = {};
+}
+
+
+
 
 
 // 编辑方法
@@ -113,18 +135,20 @@ function updateUser() {
   console.log("old");
   console.log(originData.value);
   console.log(currentData.value);
-  update(originData.value, currentData.value);
-  // 假设更新成功后，关闭弹窗
-  showEditDialog.value = false;
-  // 重新加载队伍列表
-  fetchTeams();
-}
-// 请求数据
+  updateUser(originData.value, currentData.value).then(res => {
+    if (res.code === 200) {
+      // 更新成功
+      // 弹窗提示
+      ElMessage.success(res.message);
+      // 假设更新成功后，关闭弹窗
+      showEditDialog.value = false;
+    }
+  });
 
-// 更新数据
-function update(oldData, newData) {
-  const index = tableData.value.indexOf(oldData);
-  tableData.value.splice(index, 1, newData);
+  // 重新加载队伍列表
+  fetchAll(1).then(res => {
+    tableData.value = data.listPage;
+  });
 }
 
 // 删除数据
@@ -133,15 +157,34 @@ function deleteUser(oldData) {
   console.log(oldData);
 
   // 发送删除
-
-  // 判断成功
-
+  deleteApi(oldData).then(res => {
+    if (res.code === 200) {
+      // 删除成功
+      // 弹窗提示
+      ElMessage.success(res.message);
+    }
+  });
   // 重新请求数据
-
-
+  fetchAll(1).then(res => {
+    tableData.value = data.listPage;
+  });
 }
 
 
+// 重置密码
 
+function resetPW(oldData) {
+  console.log('重置密码');
+  oldData.u_pwd='123456';
+  console.log(oldData);
+  // 发送重置密码请求
+  resetPWApi(oldData).then(res => {
+    if (res.code === 200) {
+      // 重置成功
+      // 弹窗提示
+      ElMessage.success(res.message);
+    }
+  });
+}
 
 </script>

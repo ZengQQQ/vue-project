@@ -65,6 +65,10 @@ const routes = [
     {
       path:'userM',
       component:()=>import('@/views/admin/userm/userM.vue'),
+    },
+    {
+      path:'projectM',
+      component:()=>import('@/views/admin/compm/projectM.vue'),
     }
   ]
 }

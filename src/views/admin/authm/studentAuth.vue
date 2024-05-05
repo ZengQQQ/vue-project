@@ -1,15 +1,40 @@
 <template>
 
+  <div class="add">
+    <el-button type="primary" plain @click="addB">添加</el-button>
+    <el-dialog title="学生认证信息" v-model="showAddDialog">
+      <el-form :model="currentData" label-width="100px">
+        <el-form-item label="账号">
+          <el-input v-model.trim="currentData.s_acc"></el-input>
+        </el-form-item>
+
+        <el-form-item label="名称">
+          <el-input v-model.trim="currentData.s_name"></el-input>
+        </el-form-item>
+        <el-form-item label="专业">
+          <el-input v-model.trim="currentData.s_major"></el-input>
+        </el-form-item>
+
+        <el-form-item label="允许注册">
+          <el-switch v-model="currentData.s_status" active-text="允许" inactive-text="禁止"></el-switch>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showAddDialog = false">取消</el-button>
+        <el-button type="primary" @click="saveB">保存</el-button>
+      </div>
+    </el-dialog>
+  </div>
+
   <div class="table">
     <el-table :data="tableData" stripe>
       <el-table-column prop="s_name" label="名称"></el-table-column>
       <el-table-column prop="s_acc" label="账号"></el-table-column>
-      <el-table-column prop="s_major" label="专业"></el-table-column>
       <el-table-column prop="s_status" label="状态"></el-table-column>
       <el-table-column label="操作" width="230">
         <template #default="{ row }">
-          <el-button size="default" @click="editMentor(row)">编辑</el-button>
-          <el-button size="default" @click="deleteMentor(row)" type="danger">删除</el-button>
+          <el-button size="default" @click="editB(row)">编辑</el-button>
+          <el-button size="default" @click="deleteB(row)" type="danger">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -17,7 +42,7 @@
 
 
 
-  <div class="dialog">
+  <div class="edit">
     <el-dialog title="编辑" v-model="showEditDialog">
       <el-form :model="currentData" label-width="100px">
         <el-form-item label="名称">
@@ -26,14 +51,13 @@
         <el-form-item label="专业">
           <el-input v-model.trim="currentData.s_major"></el-input>
         </el-form-item>
-
         <el-form-item label="状态">
           <el-switch v-model="currentData.s_status" active-text="允许" inactive-text="禁止"></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="showEditDialog = false">取消</el-button>
-        <el-button type="primary" @click="updateMentor">保存</el-button>
+        <el-button type="primary" @click="updateB">保存</el-button>
       </div>
     </el-dialog>
   </div>
@@ -42,23 +66,69 @@
 
 <script setup>
 import { ref } from 'vue'
-// 表格数据
-const tableData = ref([
-  { s_acc: "admin", s_name: "孙志春", s_major: "计算机", s_status: 1 },
-  { s_acc: "admin", s_name: "孙志春", s_major: "计算机", s_status: 1 },
-  { s_acc: "admin", s_name: "孙志春", s_major: "计算机", s_status: 1 },
-]);
+import baseApi from "@/api/baseUrl.js"
+import { ElMessage } from 'element-plus';
+
+
+// 请求数据
+function fetch(data, page) {
+  data.currentPage = page;
+  baseApi.post('/admin/queryStudent', {}, { params: data })
+    .then(res => {
+      if (res.code === 200) {
+        tableData.value = res.data.listPage;
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      ElMessage.error(err.message);
+    })
+}
+
+
+
+
+let tableData = ref({});
+fetch({}, 1);
+
 
 // 状态控制
 let showEditDialog = ref(false);
+let showAddDialog = ref(false);
 
 // 数据传递
 let currentData = ref(null);
-const newRow = ref({});
 const originData = ref({});
 
+
+// 添加按钮
+function addB() {
+  // currentData.value.s_status = currentData.value.s_status ? true : false;
+  currentData.value = { };
+  showAddDialog.value = true;
+};
+
+// 保存
+function saveB() {
+  currentData.value.s_status = currentData.value.s_status ? 1 : 0;
+  baseApi.post('/mentor/add', null, { params: currentData.value }).then(res => {
+    console.log(res);
+    if (res.code === 200) {
+      ElMessage.success(res.message);
+      showAddDialog.value = false;
+    }
+  }).catch(err => {
+    console.log(err);
+    ElMessage.error(err.message);
+  })
+}
+
+
+
+
+
 // 编辑方法
-function editMentor(team) {
+function editB(team) {
   currentData.value = { ...team };
   currentData.value.s_status = currentData.value.s_status === 1;
   originData.value = team;
@@ -66,7 +136,7 @@ function editMentor(team) {
 };
 
 // 保存
-function updateMentor() {
+function updateB() {
   // 将true设置为1，false设置为0
   currentData.value.s_status = currentData.value.s_status ? 1 : 0;
 
@@ -75,28 +145,42 @@ function updateMentor() {
   console.log("old");
   console.log(originData.value);
   console.log(currentData.value);
-  update(originData.value, currentData.value);
-  // 假设更新成功后，关闭弹窗
-  showEditDialog.value = false;
+  baseApi.post('/mentor/update', null, { params: currentData.value }).then(res => {
+    console.log(res);
+    if (res.code === 200) {
+      ElMessage.success(res.message);
+      // 假设更新成功后，关闭添加页面
+      showEditDialog.value = false;
+    }
+  }).catch(err => {
+    console.log(err);
+    ElMessage.error(err.message);
+  })
+
   // 重新加载队伍列表
-  fetchTeams();
+  fetch({}, 1);
 }
 
-// 请求数据
-
-// 更新数据
-function update(oldData, newData) {
-  const index = tableData.value.indexOf(oldData);
-  tableData.value.splice(index, 1, newData);
-}
 
 // 删除数据
-function deleteMentor(oldData) {
+function deleteB(oldData) {
+  console.log('删除');
+  console.log(oldData);
   // 发送删除
-
-  // 判断成功
+  baseApi.post('/mentor/delete', null, { params: oldData }).then(res => {
+    console.log(res);
+    if (res.code === 200) {
+      ElMessage.success(res.message);
+      // 假设删除成功后，关闭添加页面
+      showEditDialog.value = false;
+    }
+  }).catch(err => {
+    console.log(err);
+    ElMessage.error(err.message);
+  })
 
   // 重新请求数据
+  fetch({}, 1);
 
 
 }
