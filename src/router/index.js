@@ -54,8 +54,13 @@ const routes = [
   children:[
     {
       path:'mentorAuth',
-      // name:'MentorAuth',
+      // name:'mentorAuth',
       component:()=>import('@/views/admin/authm/mentorAuth.vue'),
+    },
+    {
+      path:'studentAuth',
+      // name:'userAuth',
+      component:()=>import('@/views/admin/authm/studentAuth.vue'),
     },
     {
       path:'userM',

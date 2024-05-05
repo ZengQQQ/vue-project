@@ -79,11 +79,17 @@
 
 <script setup>
 import { ref } from 'vue'
-import { fetch,fetchAll } from './useM'
+import { test,fetch,fetchAll } from './useM'
 // 表格数据
-let data = fetchAll(1);
-console.log(data.length);
-let tableData = ref(data);
+
+const resp = fetchAll(1);
+
+
+console.log("resp");
+console.log(resp);
+
+console.log("resp.data");
+console.log(resp.code);
 
 // 状态控制
 let showEditDialog = ref(false);
@@ -91,6 +97,7 @@ let showEditDialog = ref(false);
 // 数据传递
 let currentData = ref(null);
 const originData = ref({});
+
 
 // 编辑方法
 function editUser(team) {
