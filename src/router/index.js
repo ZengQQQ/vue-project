@@ -8,6 +8,7 @@ const routes = [
     component:()=>import('@/views/root.vue'),
     meta: { requiresAuth: false }, // 添加元信息标记不需要验证
   },
+  
   {
     path: '/login',
     name: 'Login',
@@ -30,7 +31,7 @@ const routes = [
       {path:'/team/teamGround',component:()=>import('@/components/teamcenter/TeamGround.vue'),meta:{requiresAuth:false}},
       {path:'/team/teamMange',component:()=>import('@/components/teamcenter/TeamManage.vue'),meta:{requiresAuth:false}},
       {path:'/team/teamInform',component:()=>import('@/components/teamcenter/TeamInform.vue'),meta:{requiresAuth:false}},
-    
+      {path:'/team/teamMember',component:()=>import('@/components/teamcenter/TeamMember.vue'),meta:{requiresAuth:false}},
       //personalcenter
       {path:'/user/personalManage',component:()=>import('@/components/personal/PersonInfo.vue'),meta:{requiresAuth:false}},
       

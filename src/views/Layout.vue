@@ -17,17 +17,9 @@ import { useUserInfoStore } from "@/stores/userInfo.js";
 import { useTokenStore } from "@/stores/token.js";
 
 const tokenStore = useTokenStore();
-const userInfoStore = useUserInfoStore();
-
-//调用函数,获取用户详细信息
-const getUserInfo = async () => {
-  //调用接口
-  let result = await getUserInfoService();
-  //数据存储到pinia中
-  userInfoStore.setInfo(result.data);
-};
-
 // getUserInfo();
+
+const userInfoStore = useUserInfoStore();
 
 //条目被点击后,调用的函数
 import { useRouter } from "vue-router";
@@ -35,7 +27,7 @@ const router = useRouter();
 import { ElMessage, ElMessageBox } from "element-plus";
 const handleCommand = (command) => {
   //判断指令
-  if (command === "logout") {
+  if (command === "logout"){
     //退出登录
     ElMessageBox.confirm("您确认要退出吗?", "温馨提示", {
       confirmButtonText: "确认",
@@ -127,6 +119,12 @@ const handleCommand = (command) => {
               <User />
             </el-icon>
             <span>组队广场</span>
+          </el-menu-item>
+          <el-menu-item index="2-4" route="/team/teamMember">
+            <el-icon>
+              <Crop />
+            </el-icon>
+            <span>未来成员</span>
           </el-menu-item>
           <el-menu-item index="2-2" route="/team/teamMange">
             <el-icon>

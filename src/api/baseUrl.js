@@ -5,7 +5,7 @@ import { useTokenStore } from '@/stores/token.js';
 import router from "@/router";
 
 const baseApi = axios.create({
-  baseURL: 'https://win11.cs-go.club/contestSys',
+  baseURL: 'http://localhost:8080/',
   // 跨域访问时是否需要使用凭证
   withCredentials: false,
   // 可以在这里添加拦截器
@@ -22,8 +22,8 @@ baseApi.interceptors.request.use(
     const tokenStore = useTokenStore();
     if (tokenStore.token) {
       config.headers.Authorization = tokenStore.token;
+      console.log("header 带的tokens:"+tokenStore.token);
     }
-
     return config;
   },
   (error) => {
