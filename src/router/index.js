@@ -48,6 +48,20 @@ const routes = [
   name:'Test',
   component:()=>import('@/views/test.vue'),
   meta:{requiresAuth:false}
+},
+{
+  path: '/admin',
+  children:[
+    {
+      path:'mentorAuth',
+      // name:'MentorAuth',
+      component:()=>import('@/views/admin/authm/mentorAuth.vue'),
+    },
+    {
+      path:'userM',
+      component:()=>import('@/views/admin/userm/userM.vue'),
+    }
+  ]
 }
 ]
 
