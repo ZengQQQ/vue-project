@@ -42,17 +42,6 @@ const validatePasswords = () => {
   return '';
 };
 
-const mentorData = {
-  identity: 'teacher',
-  params: {
-    t_id: teacherInfo.value.t_id,
-    t_name: teacherInfo.value.t_name,
-    t_pwd: teacherInfo.value.t_pwd,
-    t_tele: teacherInfo.value.t_tele,
-    t_mail: teacherInfo.value.t_mail,
-    t_direction: teacherInfo.value.t_direction
-  }
-};
 
 async function submitTeacherForm(){
   if (!passwordsMatch.value) {
@@ -65,6 +54,23 @@ async function submitTeacherForm(){
     alert("Invalid email address!");
     return;
   }
+
+  //根据这里进行修改
+// u_acc     varchar(8)    not null comment '学号和教师工号',
+// u_pwd     varchar(64)   not null comment '用户密码',
+// u_name    varchar(10)   null comment '用户名',
+// u_tele    varchar(13)   null,
+// u_mail    varchar(50)   null,
+// u_identiy int default 0 null comment '用户身份0学生1老师',
+  const mentorData = {
+    u_acc: teacherInfo.value.t_id,
+    u_pwd: teacherInfo.value.t_pwd,
+    u_name: teacherInfo.value.t_name,
+    u_tele: teacherInfo.value.t_tele,
+    u_mail: teacherInfo.value.t_mail,
+    identiy: 'mentor',
+     };
+
   const res = await loginService.register(mentorData);
   if(res.flag===1 && res.success===1){
   //注册成功，返回登录？
@@ -112,9 +118,9 @@ async function submitTeacherForm(){
           <input v-model="teacherInfo.t_mail" placeholder="Enter Email" @input="validateEmail" />
           <p v-if="validateEmail()" style="color: red;">{{ validateEmail() }}</p>
         </el-form-item>
-      <el-form-item label="研究方向">
+      <!-- <el-form-item label="研究方向">
           <input v-model="teacherInfo.t_direction" placeholder="Enter Research Field" required />
-      </el-form-item>
+      </el-form-item> -->
           <el-form-item>
           <button type="submit">Register</button>
         </el-form-item>

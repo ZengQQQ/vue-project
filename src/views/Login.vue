@@ -2,9 +2,14 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router"; // 引入 useRouter
 import { ElForm, ElMessage } from "element-plus";
-import LoginService from "@/api/LoginService"; // 引入登录接口
+import {login} from "@/api/LoginService"; // 引入登录接口
 import CustomeParticles from "@/components/particles/ParticlesCustomer.vue"; // 引入粒子效果组件
 import { useTokenStore } from "@/stores/token.js";
+import { getUserInfoByAccount } from "@/api/user.js";
+import { useUserInfoStore } from "@/stores/userInfo.js";
+const userInfoStore = useUserInfoStore();
+
+
 
 const router = useRouter(); // 使用 useRouter
 const account = ref("");
@@ -14,7 +19,9 @@ const identify = ref("student");
 const tokenStore = useTokenStore();
 
 async function loginProcess() {
-    const res = await LoginService.login(
+
+  try{
+    const res = await login(
       account.value,     
       password.value,
       identify.value
@@ -22,11 +29,23 @@ async function loginProcess() {
     console.log(res);
     if (res.code === 200) {
       ElMessage.success(res.message?res.message:"登录成功");
-      tokenStore.setToken(res);
+      tokenStore.setToken(res.data);
+
+      console.log("token", tokenStore.token);
+      // 调用函数,获取用户详细信息
+      console.log("获取用户信息");
+      let result = await getUserInfoByAccount();
+      //数据存储到pinia中
+      userInfoStore.setInfo(result.data);
+      console.log("用户信息", userInfoStore.info);
       router.push("/home");
     } else {
       ElMessage.error(res.message?res.message:"登录失败");
     }
+  }
+  catch(err){
+    console.log(err);
+  }
 };
 
 function reset() {

@@ -9,7 +9,7 @@ export const useUserInfoStore = defineStore("userInfo", () => {
     }
 
     const removeInfo = () => {
-        info = {};
+        info.value = {};
     }
 
     return{
