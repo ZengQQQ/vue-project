@@ -10,8 +10,13 @@ export const getWorkListByUser = (params) => {
   return baseApi.get("/work/listByUser", params)
 }
 
+
 // 创建新工作
-export const createWork = (params) => {
+export const createWork = (userInfo,workInfo) => {
+    const params = {
+        userInfo: userInfo,
+        workInfo: workInfo
+    }
   return baseApi.post("/work/create", params)
 }
 
@@ -23,7 +28,11 @@ export const deleteWork = (params) => {
 
 
 // 更新工作
-export const updateWork = (params) => {
+export const updateWork = (newWorkInfo,oldWorkInfo) => {
+    const params = {
+        newWorkInfo: newWorkInfo,
+        oldWorkInfo: oldWorkInfo
+    }
     return baseApi.post("/work/update", params)
     }
 
@@ -45,5 +54,25 @@ export const refuseWorkApply = (params) => {
 
 
 
+    //工作通知模块
+    /**
+     * 工作通知模块
+     * 获取工作消息通知等，包括工作申请，工作进度，工作完成等
+     * 
+     * 
+     */
 
-export default { getWorkList, createWork, deleteWork, updateWork, getWorkApply, agreeWorkApply, refuseWorkApply}
+    //获取工作申请通知
+    export const getWorkInform = (userInfo) => {
+        return baseApi.get("/work/inform", userInfo)
+        }
+
+    export const acceptWorkApplication=(params) => {
+        return baseApi.post("/work/acceptApplication", params)
+        }
+
+    export const refuseWorkApplication=(params) => {
+        return baseApi.post("/work/refuseApplication", params)
+        }
+
+

@@ -14,24 +14,20 @@ const identify = ref("student");
 const tokenStore = useTokenStore();
 
 async function loginProcess() {
-  try {
     const res = await LoginService.login(
-      account.value,
+      account.value,     
       password.value,
       identify.value
     );
     console.log(res);
     if (res.code === 200) {
-      ElMessage.success("登录成功");
+      ElMessage.success(res.message?res.message:"登录成功");
       tokenStore.setToken(res);
       router.push("/home");
     } else {
-      alert("登录失败,请检查账号密码是否正确");
+      ElMessage.error(res.message?res.message:"登录失败");
     }
-  } catch (e) {
-    console.log(e);
-  }
-}
+};
 
 function reset() {
   account.value = "";

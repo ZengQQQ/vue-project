@@ -126,10 +126,10 @@ export default {
           value: 0.5
         },
         size: {
-          value: 150,
+          value: 100,
           random: {
             enable: true,
-            minimumValue: 80
+            minimumValue: 60
           }
         },
         move: {

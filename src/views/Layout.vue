@@ -49,7 +49,7 @@ const handleCommand = (command) => {
         userInfoStore.removeInfo();
 
         //2.跳转到登录页面
-        router.push("/login");
+        router.push("/");
         ElMessage({
           type: "success",
           message: "退出登录成功",
@@ -94,13 +94,20 @@ const handleCommand = (command) => {
             </el-icon>
             <span>工作广场</span>
           </el-menu-item>
-          <el-menu-item index="1-2" route="/work/workManage">
+          <el-menu-item index="1-2" route="/work/workList">
             <el-icon>
               <Crop />
             </el-icon>
-            <span>工作管理</span>
+            <span>工作单</span>
           </el-menu-item>
-          <el-menu-item index="1-3"  route="/work/workInform">
+          <el-menu-item index="1-3" route="/work/workManage">
+            <el-icon>
+              <Crop />
+            </el-icon>
+            <span>我的工作</span>
+          </el-menu-item>
+         
+          <el-menu-item index="1-4"  route="/work/workInform">
             <el-icon>
               <EditPen />
             </el-icon>
@@ -142,7 +149,7 @@ const handleCommand = (command) => {
             </el-icon>
             <span>个人中心</span>
           </template>
-          <el-menu-item index="3-1" route="/user/info">
+          <el-menu-item index="3-1" route="/user/personalManage">
             <el-icon>
               <User />
             </el-icon>

@@ -284,7 +284,6 @@ const searchJobs = async (params) => {
       } catch (error) {
         console.error("Error applying for job with team:", error);
       }
-
     };
 
     return {

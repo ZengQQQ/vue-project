@@ -4,11 +4,12 @@ import baseUrl from '@/api/baseUrl';
 //请求网址获取用户登录信息,传入用户账号，密码，标识：学生，老师，管理员。
 const loginService = {
     login(account, password, identity) {
-      var params = new URLSearchParams();
-        params.append('account', account);
-        params.append('password',password);
-        params.append('identity',identity);//student，mentor,admin
-        return baseUrl.post("/login",params )
+      let params = {
+        u_acc:count,
+        u_pwd: password,
+        identity: identity
+      }
+      return baseUrl.post("/loginControl",params )
       },
 
       //传入参数：identity={teacher,student}，params={数据库中表的键值对}

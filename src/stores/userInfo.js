@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 
 export const useUserInfoStore = defineStore("userInfo", () => {
-    const info = ({})
+    const info = ref({})
     const setInfo =  (newInfo) => {
         info.value = newInfo;
     }
