@@ -38,7 +38,13 @@ async function loginProcess() {
       //数据存储到pinia中
       userInfoStore.setInfo(result.data);
       console.log("用户信息", userInfoStore.info);
-      router.push("/home");
+      // 跳转到普通
+     if (identify.value === "admin") {
+        router.push("/admin/adhome");
+      }else{
+        router.push("/home");
+      }
+
     } else {
       ElMessage.error(res.message?res.message:"登录失败");
     }

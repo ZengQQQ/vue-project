@@ -52,37 +52,16 @@ const routes = [
 },
 {
   path: '/admin',
+  component:()=>import('@/views/admin/layout.vue'),
   children:[
-    {
-      path:'mentorAuth',
-      // name:'mentorAuth',
-      component:()=>import('@/views/admin/authm/mentorAuth.vue'),
-    },
-    {
-      path:'studentAuth',
-      // name:'userAuth',
-      component:()=>import('@/views/admin/authm/studentAuth.vue'),
-    },
-    {
-      path:'userM',
-      component:()=>import('@/views/admin/userm/userM.vue'),
-    },
-    {
-      path:'projectM',
-      component:()=>import('@/views/admin/compm/projectM.vue'),
-    },
-    {
-      path:'stall',
-      component:()=>import('@/views/admin/stall/stallm.vue'),
-    },
-    {
-      path:'smmessage',
-      component:()=>import('@/views/admin/stall_message/stall_mentor_message.vue'),
-    },
-    {
-      path:'spmessage',
-      component:()=>import('@/views/admin/stall_message/stall_project_message.vue'),
-    }
+    {path:'/admin/adhome',component:()=>import('@/views/admin/adhome.vue'),},
+    {path:'/admin/mentorAuth',component:()=>import('@/views/admin/authm/mentorAuth.vue'),},
+    {path:'/admin/studentAuth',component:()=>import('@/views/admin/authm/studentAuth.vue'),},
+    {path:'/admin/userM',component:()=>import('@/views/admin/userm/userM.vue'),},
+    {path:'/admin/projectM',component:()=>import('@/views/admin/compm/projectM.vue'),},
+    {path:'/admin/stall',component:()=>import('@/views/admin/stall/stallm.vue'),},
+    {path:'/admin/smmessage',component:()=>import('@/views/admin/stall_message/stall_mentor_message.vue'),},
+    {path:'/admin/spmessage',component:()=>import('@/views/admin/stall_message/stall_project_message.vue'),}
   ]
 }
 ]
