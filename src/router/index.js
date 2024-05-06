@@ -70,6 +70,18 @@ const routes = [
     {
       path:'projectM',
       component:()=>import('@/views/admin/compm/projectM.vue'),
+    },
+    {
+      path:'stall',
+      component:()=>import('@/views/admin/stall/stallm.vue'),
+    },
+    {
+      path:'smmessage',
+      component:()=>import('@/views/admin/stall_message/stall_mentor_message.vue'),
+    },
+    {
+      path:'spmessage',
+      component:()=>import('@/views/admin/stall_message/stall_project_message.vue'),
     }
   ]
 }
