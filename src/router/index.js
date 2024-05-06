@@ -52,6 +52,7 @@ const routes = [
 },
 {
   path: '/admin',
+  name: "Admin",
   component:()=>import('@/views/admin/layout.vue'),
   children:[
     {path:'/admin/adhome',component:()=>import('@/views/admin/adhome.vue'),},

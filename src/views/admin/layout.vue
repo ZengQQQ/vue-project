@@ -1,6 +1,5 @@
 <template>
   <el-container>
-
     <el-aside width="160px">
       <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" router>
         <!-- 导航开始 -->
@@ -79,10 +78,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 // 打开关闭菜单
-const handleOpen = (key, keyPath) => {
+const handleOpen = (key, keyPath) => {}
+const handleClose = (key, keyPath) => {}
 
-}
-const handleClose = (key, keyPath) => {
-
-}
 </script>
