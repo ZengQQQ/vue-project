@@ -173,7 +173,7 @@ const handleCommand = (command) => {
       <!-- 头部区域 -->
       <el-header>
         <div>
-          欢迎您！<strong>{{ userInfoStore.info.nickname }}</strong>
+          欢迎您！<strong>{{ userInfoStore.info.u_name }}</strong>
         </div>
         <!-- 下拉菜单 -->
         <!-- command: 条目被点击后会触发,在事件函数上可以声明一个参数,接收条目对应的指令 -->

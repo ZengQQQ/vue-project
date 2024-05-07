@@ -1,5 +1,6 @@
 <script setup>
-import loginService from '@/api/LoginService';
+import {register} from '@/api/LoginService';
+import { ElMessage } from 'element-plus';
 import { ref, computed } from 'vue';
 
 const studentInfo = ref({
@@ -54,40 +55,26 @@ async function submitStudentForm(){
     alert("Invalid email address!");
     return;
   }
-  //根据这里进行修改
-// u_acc     varchar(8)    not null comment '学号和教师工号',
-// u_pwd     varchar(64)   not null comment '用户密码',
-// u_name    varchar(10)   null comment '用户名',
-// u_tele    varchar(13)   null,
-// u_mail    varchar(50)   null,
-// u_identiy int default 0 null comment '用户身份0学生1老师',
-
   const sentData={
     u_acc: studentInfo.value.s_xuehao,
     u_pwd: studentInfo.value.s_pwd,
     u_name: studentInfo.value.s_name,
+    u_major: studentInfo.value.s_major,
     u_tele: studentInfo.value.s_tele,
     u_mail: studentInfo.value.s_mail,
-    identiy: 'student'
+    u_identity: '0',
   };
   // Perform additional validation or form submission actions here
-  const res = await loginService.register(sentData)
-  // console.log(studentInfo.value);
-  // console.log(studentData.value);
-  if(res.flag===1 && res.success===1){
-    //注册成功，返回登录？
-    alert("注册成功");
-    return;
-  }else if(res.flag===1){
-    //confirm 未检查到您的认证信息，请联系管理员添加
-    alert("未检测到您的认证信息，请联系管理员添加。");
-    return;
-  }else if(res.success===0){
-    //confirm 注册失败，请检查信息是否正确,检查您的账号是否已经注册。
-    alert("注册失败，请检查信息是否正确，检查您的账号是否已经注册。");
-    return;
+  try {
+    const res = await register(sentData);
+    if (res.code === 200) {;
+      ElMessage.success('注册成功！');
+    } else {
+      ElMessage.error(res.message || '注册失败！');
+    }
+  } catch (error) {
+    // Handle or report the error
   }
-  alert("网络错误，请稍后再试。");
 };
 
 </script>
@@ -105,9 +92,9 @@ async function submitStudentForm(){
         <el-form-item label="姓名">
           <input v-model="studentInfo.s_name" placeholder="Enter Name" required />  
         </el-form-item> 
-        <!-- <el-form-item label="专业">
+        <el-form-item label="专业">
           <input v-model="studentInfo.s_major" placeholder="Enter Major" required />
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="密码">
           <input v-model="studentInfo.s_pwd" type="password" placeholder="Enter Password" required />  
         </el-form-item>

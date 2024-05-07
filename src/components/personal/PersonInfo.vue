@@ -9,7 +9,7 @@
           <el-col :span="12">
               <el-form :model="userInfo" :rules="rules" label-width="80px">
                   <el-form-item label="ID" prop="u_id">
-                      <el-input v-model="userInfo.u_id" :disabled="true"></el-input>
+                      <el-input v-model="userInfo.u_acc" :disabled="true"></el-input>
                   </el-form-item>
                   <el-form-item label="姓名" prop="u_name">
                       <el-input v-model="userInfo.u_name" placeholder="请输入姓名"></el-input>
@@ -19,6 +19,9 @@
                   </el-form-item>
                   <el-form-item label="邮箱" prop="u_mail">
                       <el-input v-model="userInfo.u_mail" placeholder="请输入邮箱"></el-input>
+                  </el-form-item>
+                  <el-form-item label="专业" prop="u_major">
+                        <el-input v-model="userInfo.u_major" placeholder="请输入专业或者研究方向"></el-input>
                   </el-form-item>
                   <el-form-item label="简介" prop="u_intro">
                       <el-input v-model="userInfo.u_intro" placeholder="请输入简介" type="textarea" :rows="4"></el-input>
@@ -42,11 +45,13 @@ import { updateUserInfoService } from "@/api/user.js";
 const userInfoStore = useUserInfoStore();
 
 const userInfo = ref({
-    u_id: '211110223',
-    u_name: '张三',
-    u_tele: '13116408747',
-    u_mail: '22000304515@qq.com',
-    u_intro: '我是某某专业的，喜欢干某某事情',
+    u_id: userInfoStore.info.u_id,
+    u_acc: userInfoStore.info.u_acc,
+    u_name: userInfoStore.info.u_name,
+    u_tele: userInfoStore.info.u_tele,
+    u_mail: userInfoStore.info.u_mail,
+    u_major: userInfoStore.info.u_major,
+    u_intro: userInfoStore.info.u_intro,
 });
 
 const rules ={
@@ -59,7 +64,15 @@ const rules ={
 
 const updateUserInfo = async () => {
     // 调用接口
-    let res = await updateUserInfoService(userInfo.value);
+    let res = await updateUserInfoService({
+        u_id: userInfo.value.u_id,
+        u_name: userInfo.value.u_name,
+        u_tele: userInfo.value.u_tele,
+        u_mail: userInfo.value.u_mail,
+        u_major: userInfo.value.u_major,
+        u_intro: userInfo.value.u_intro,
+        u_acc: userInfo.value.u_acc,
+    });
 
     console.log(userInfo.value);
     ElMessage.success(res.message?res.message:'修改成功');

@@ -34,7 +34,7 @@ const routes = [
       {path:'/team/teamMember',component:()=>import('@/components/teamcenter/TeamMember.vue'),meta:{requiresAuth:false}},
       //personalcenter
       {path:'/user/personalManage',component:()=>import('@/components/personal/PersonInfo.vue'),meta:{requiresAuth:false}},
-      
+      {path:'/user/resetPassword',component:()=>import('@/components/personal/ResetPassword.vue'),meta:{requiresAuth:false}},
     ]
   },
   // 添加更多的路由规则

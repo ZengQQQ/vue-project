@@ -1,6 +1,7 @@
 <template>
   <div class="notification-list">
     <h2>工作通知</h2>
+    
     <el-tabs v-model="activeTab">
       <el-tab-pane label="我发送的" name="sent">
         <template v-for="notification in sentNotifications" :key="notification.id">
@@ -15,6 +16,7 @@
           </el-card>
         </template>
       </el-tab-pane>
+
       <el-tab-pane label="我接收的" name="received">
         <template v-for="notification in receivedNotifications" :key="notification.id">
           <el-card>
@@ -51,27 +53,7 @@ const activeTab = ref('sent');
 
 const loadNotifications = async () => {
   // 调用后端接口获取工作通知数据
-  // const notifications = await getWorkInform(userInfoStore.info);
-  const notifications = ref([
-    {
-      id: 1,
-      teamInfo: '团队1',
-      applicantInfo: '申请人1',
-      applicationTime: '2021-10-01 12:00:00',
-      applicationStatus: '待处理',
-      applicationDirection: 'apply',
-    },
-    {
-      id: 2,
-      teamInfo: '团队2',
-      applicantInfo: '申请人2',
-      applicationTime: '2021-10-02 12:00:00',
-      applicationStatus: '待处理',
-      applicationDirection: 'invite',
-    },
-  ]);
-  sentNotifications.value = notifications.value.filter(notification => notification.applicationDirection === 'apply');
-  receivedNotifications.value = notifications.value.filter(notification => notification.applicationDirection === 'invite');
+  const notifications = await getWorkInform(userInfoStore.info);
 };
 
 const handleAccept = async (notification) => {

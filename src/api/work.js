@@ -2,39 +2,50 @@ import baseApi  from "@/api/baseUrl";
 
 // 获取工作列表
 export const getWorkList = () => {
-  return baseApi.get("/work/list")
+  return baseApi.get("/admin/queryProject",null,{params: {}})
 }
 
-//获取个人承接工作列表
+export const getWorkListCondition = (params) =>{
+    return baseApi.post('/admin/queryProject',null,{params:params});
+}
+
+//获取个人所在队伍承接工作列表
 export const getWorkListByUser = (params) => {
-  return baseApi.get("/work/listByUser", params)
+  return baseApi.get("/user/queryJoinedStall",null,{params: params})
+}
+
+/*workManagement*/
+// 创建新工作
+export const fetchMyJobs= (params)  => {
+    return baseApi.post("/admin/queryProject",null,{params:params});
 }
 
 
-// 创建新工作
-export const createWork = (userInfo,workInfo) => {
-    const params = {
-        userInfo: userInfo,
-        workInfo: workInfo
-    }
-  return baseApi.post("/work/create", params)
+export const createJob = (params) => {
+  return baseApi.post("/user/CreateProject", null,{params: params});
 }
 
 
 // 删除工作
-export const deleteWork = (params) => {
+export const deleteJob = (params) => {
     return baseApi.post("/work/delete", params)
     }
 
 
 // 更新工作
-export const updateWork = (newWorkInfo,oldWorkInfo) => {
-    const params = {
-        newWorkInfo: newWorkInfo,
-        oldWorkInfo: oldWorkInfo
+export const updateJob = (params) => {
+    console.log(params);
+    return baseApi.post("/user/UpdateProject", null,{params: params});
+}
+
+//申请工作
+export const applyWorkWithTeam = (job,team) => {
+    params = {
+        job: job,
+        team: team
     }
-    return baseApi.post("/work/update", params)
-    }
+    return baseApi.post("/work/apply",null,{params: params})
+}
 
 
 //查看工作申请
@@ -76,3 +87,39 @@ export const refuseWorkApply = (params) => {
         }
 
 
+/**自己管理的房间，和别人管理的房间，这里组队承接之后就得到了房间 */
+export const getMyManagedStalls = (params) => {
+    return baseApi.post("/admin/queryStall",null,{params: params});
+}
+
+export const getMyParticipatedStalls = (params) => {
+    return baseApi.post("/admin/queryJoinedStall",null,{params: params});
+}
+
+export const updateStallInfo = (newStallInfo,oldStallInfo) => {
+    const params = {
+        newStallInfo: newStallInfo,
+        oldStallInfo: oldStallInfo
+    }
+    return baseApi.post("/stall/update", null,{params: params});
+}
+
+export const deleteStallProject =  (params) => {
+    return baseApi.post("/stall/delete",null,{params: params});
+    }
+    
+export const createStallProject = (userInfo,stallInfo) => {
+    const params = {
+        userInfo: userInfo,
+        stallInfo: stallInfo
+    }
+    return baseApi.post("/stall/create",null,{params: params});
+}
+
+export const deleteStallMentor = (userInfo,stallInfo) => {
+    const params = {
+        userInfo: userInfo,
+        stallInfo: stallInfo
+    }
+    return baseApi.post("/stall/deleteMentor",null,{params: params});
+}

@@ -14,6 +14,7 @@
     "axios": "^1.6.8",
     "element-plus": "^2.7.0",
     "gsap": "^3.12.5",
+    "moment": "^2.30.1",
     "particle.js": "^1.0.7",
     "particles.vue3": "^2.12.0",
     "pinia": "^2.1.7",

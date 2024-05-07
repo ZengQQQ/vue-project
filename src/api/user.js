@@ -1,23 +1,19 @@
 import baseApi from "@/api/baseUrl";
 
 
-export const getUserInfoService = (params) => {
-    return baseApi.get("/user/info", params);
+export const getUserInfoService = () => {
+    return baseApi.get("/getCurrentUser",null,{params: {}});
 };
 
-export const updateUserInfoService = (userInfoData) => {
-    return baseApi.post("/user/update", userInfoData);
+export const updateUserInfoService = (params) => {
+    return baseApi.post("/user/UpdateUser",null,{params: params});
 };
 
 
-export const getUserInfoByAccount = () => {
-    console.log("getUserInfoByAccount");
-    return baseApi.get("/getCurrentUser");
-};
 
 export const getStudents = (params) => {
-    return baseApi.get("/user/student", params);
+    return baseApi.post("/admin/queryUser", null,{params: params});
 };
 export const getTeachers = (params) => {
-    return baseApi.get("/user/teacher", params);
+    return baseApi.post("/admin/queryUser", null,{params: params});
 };

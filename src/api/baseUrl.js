@@ -22,7 +22,7 @@ baseApi.interceptors.request.use(
     const tokenStore = useTokenStore();
     if (tokenStore.token) {
       config.headers.Authorization = tokenStore.token;
-      console.log("header 带的tokens:"+tokenStore.token);
+      // console.log("header 带的tokens:"+tokenStore.token);
     }
     return config;
   },

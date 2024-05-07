@@ -1,6 +1,8 @@
 <script setup>
-import loginService from '@/api/LoginService';
+import {register} from '@/api/LoginService';
+import { ElMessage } from 'element-plus';
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 const teacherInfo = ref({
   t_id: '',
@@ -60,33 +62,30 @@ async function submitTeacherForm(){
 // u_pwd     varchar(64)   not null comment '用户密码',
 // u_name    varchar(10)   null comment '用户名',
 // u_tele    varchar(13)   null,
+//u_major varchar(100) null comment '专业',
 // u_mail    varchar(50)   null,
 // u_identiy int default 0 null comment '用户身份0学生1老师',
   const mentorData = {
     u_acc: teacherInfo.value.t_id,
     u_pwd: teacherInfo.value.t_pwd,
     u_name: teacherInfo.value.t_name,
+    u_major: teacherInfo.value.t_major,
     u_tele: teacherInfo.value.t_tele,
     u_mail: teacherInfo.value.t_mail,
-    identiy: 'mentor',
+    u_identity: "1",
      };
-
-  const res = await loginService.register(mentorData);
-  if(res.flag===1 && res.success===1){
+try{
+  const res = await register(mentorData);
+  if(res.code===200){
   //注册成功，返回登录？
-    alert("注册成功！");
-    return ;
-  }else if(res.flag===1){
-  //confirm 未检查到您的认证信息，请联系管理员添加
-  alert("未检测到您的认证信息，请联系管理员添加。");
-  return;
-  }else if(res.success===0){
-  //confirm 注册失败，请检查信息是否正确,检查您的账号是否已经注册。
-    alert("注册失败，请检查信息是否正确，检查您的账号是否已经注册。");
-    return;
+    ElMessage.success('注册成功！'); 
+    router.push('/login');
+  }else{
+    ElMessage.error(res.message || '注册失败！');
   }
-  
-  alert("网络错误，请稍后再试。");
+} catch (error) {
+  // 处理或报告错误
+}
 };
 </script>
 
@@ -118,9 +117,9 @@ async function submitTeacherForm(){
           <input v-model="teacherInfo.t_mail" placeholder="Enter Email" @input="validateEmail" />
           <p v-if="validateEmail()" style="color: red;">{{ validateEmail() }}</p>
         </el-form-item>
-      <!-- <el-form-item label="研究方向">
-          <input v-model="teacherInfo.t_direction" placeholder="Enter Research Field" required />
-      </el-form-item> -->
+      <el-form-item label="研究方向">
+          <input v-model="teacherInfo.t_major" placeholder="Enter Research Field" required />
+      </el-form-item>
           <el-form-item>
           <button type="submit">Register</button>
         </el-form-item>
