@@ -49,6 +49,24 @@ const routes = [
   name:'Test',
   component:()=>import('@/views/test.vue'),
   meta:{requiresAuth:false}
+},
+{
+  path: '/admin',
+  name: "Admin",
+  component:()=>import('@/views/admin/layout.vue'),
+  children:[
+    {path:'/admin/adhome',component:()=>import('@/views/admin/adhome.vue'),},
+    {path:'/admin/mentorAuth',component:()=>import('@/views/admin/authm/mentorAuth.vue'),},
+    {path:'/admin/studentAuth',component:()=>import('@/views/admin/authm/studentAuth.vue'),},
+    {path:'/admin/userM',component:()=>import('@/views/admin/userm/userM.vue'),},
+    {path:'/admin/projectM',component:()=>import('@/views/admin/compm/projectM.vue'),},
+    {path:'/admin/stall',component:()=>import('@/views/admin/stall/stallm.vue'),},
+    {path:'/admin/smmessage',component:()=>import('@/views/admin/stall_message/stall_mentor_message.vue'),},
+    {path:'/admin/spmessage',component:()=>import('@/views/admin/stall_message/stall_project_message.vue'),},
+    {path:'/admin/stmessage',component:()=>import('@/views/admin/stall_message/stall_team_message.vue'),},
+    {path:'/admin/teamM',component:()=>import('@/views/admin/teamm/teamm.vue'),},
+    {path:'/admin/teamumessage',component:()=>import('@/views/admin/teamm/team_user_message.vue'),},
+  ]
 }
 ]
 
