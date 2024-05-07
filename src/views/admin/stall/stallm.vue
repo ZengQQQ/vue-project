@@ -4,12 +4,12 @@
       <el-form :model="queryData">
         <el-row :gutter="20">
           <el-col :span="6">
-            <el-form-item label="账号">
-              <el-input v-model.trim="queryData.u_acc"></el-input>
+            <el-form-item label="房间名">
+              <el-input v-model.trim="queryData.st_name"></el-input>
             </el-form-item></el-col>
           <el-col :span="6">
-            <el-form-item label="名称">
-              <el-input v-model.trim="queryData.u_name"></el-input>
+            <el-form-item label="房间信息">
+              <el-input v-model.trim="queryData.st_info"></el-input>
             </el-form-item></el-col>
           <el-col :span="6">
             <el-button type="primary" @click="fetch(queryData, 1)">搜索</el-button>
@@ -19,10 +19,10 @@
       </el-form>
     </el-header>
     <el-main>
-      <el-button type="primary" plain @click="addB">添加</el-button>
+      <el-button type="primary" plain @click="addB" disabled>添加</el-button>
       <el-dialog title="添加比赛" v-model="showAddDialog">
         <el-form :model="currentData" label-width="100px">
-          <!-- items.. -->
+          
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="showAddDialog = false">取消</el-button>
@@ -30,12 +30,11 @@
         </div>
       </el-dialog>
 
-      <el-table :data="tableData" stripe v-loading="vLoading" element-loading-text="Loading..."
-        element-loading-background="rgba(122, 122, 122, 0.8)">
+      <el-table :data="tableData">
         <el-table-column prop="st_id" label="房间ID"></el-table-column>
         <el-table-column prop="st_name" label="房间名"></el-table-column>
         <el-table-column prop="st_info" label="房间信息"></el-table-column>
-        <el-table-column prop="host.u_acc" label="房主账号"></el-table-column>
+        <el-table-column prop="u_name" label="房主名称"></el-table-column>
         <el-table-column prop="st_status" label="房间状态">
           <template #default="{ row }">
             <el-tag v-if="row.st_status === 0">正常</el-tag>
@@ -47,7 +46,7 @@
         <el-table-column label="操作" width="230">
           <template #default="{ row }">
             <el-button size="default" @click="editB(row)">编辑</el-button>
-            <el-button size="default" @click="deleteB(row)" type="danger">删除</el-button>
+            <el-button size="default" @click="deleteB(row)" type="danger" disabled>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -95,6 +94,7 @@ let queryData = ref({});
 // 重置搜索条件
 function resetB() {
   queryData.value = {};
+  fetch(queryData.value, 1);
 }
 
 // 请求数据
@@ -109,6 +109,17 @@ async function fetch(data, c_page) {
     vLoading.value = false;
     if (res.code === 200) {
       tableData.value = res.data.listPage;
+      //数据处理
+      tableData.value.forEach((item) => {
+      item.u_acc = item.host.u_acc;
+      item.u_name = item.host.u_name;
+      delete item.host;
+      delete item.teamFix;
+      delete item.project;
+      delete item.mentor;
+      });
+
+
       if (res.data.totalSize === 0) {
         ElMessage.warning('暂无数据');
       }
@@ -140,9 +151,6 @@ async function saveB() {
 
   // 关闭添加框，确保在请求完成后执行  
   showAddDialog.value = false;
-
-
-  currentData.value.m_status = currentData.value.m_status ? 1 : 0;
   try {
     const res = await baseApi.post('/user/add', null, { params: currentData.value });
     console.log(res);
@@ -178,9 +186,6 @@ async function updateB() {
 
   // 假设更新成功后，关闭编辑页面  
   showEditDialog.value = false;
-
-
-
   // 发送请求到后端更新队伍信息  
   console.log('更新');
   console.log("old");
@@ -188,7 +193,7 @@ async function updateB() {
   console.log(currentData.value);
 
   try {
-    const res = await baseApi.post('/user/update', null, { params: currentData.value });
+    const res = await baseApi.post('/admin/stall/update', null, { params: currentData.value });
     console.log(res);
     if (res.code === 200) {
       ElMessage.success(res.message);

@@ -224,7 +224,7 @@ async function updateB() {
   console.log(currentData.value);
 
   try {
-    const res = await baseApi.post('/admin/TeamMessageBan', null, { params: currentData.value });
+    const res = await baseApi.post('/admin/stall/update', null, { params: currentData.value });
     console.log(res);
     if (res.code === 200) {
       ElMessage.success(res.message);
