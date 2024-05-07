@@ -1,224 +1,279 @@
 <template>
 
-    <div class="add">
-      <el-button type="primary" plain @click="addB">添加</el-button>
+  <el-container>
+    <el-header>
+      <el-form :model="queryData">
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="名称">
+              <el-input v-model.trim="queryData.t_name"></el-input>
+            </el-form-item></el-col>
+          <el-col :span="6">
+            <el-form-item label="简介">
+              <el-input v-model.trim="queryData.t_info"></el-input>
+            </el-form-item></el-col>
+          <el-col :span="6">
+            <el-button type="primary" @click="fetch(queryData, 1)">搜索</el-button>
+            <el-button type="text" @click="resetB">reset</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-header>
+    <el-main>
+
+      <el-button type="primary" plain @click="addB" disabled>添加</el-button>
       <el-dialog title="添加队伍？" v-model="showAddDialog">
         <el-form :model="currentData" label-width="100px">
-            <el-form-item label="队长账号" prop="u_acc">
-        <el-input v-model="currentData.u_acc"></el-input>
-      </el-form-item>
-      <el-form-item label="队伍名称" prop="t_name">
-        <el-input v-model="currentData.t_name"></el-input>
-      </el-form-item>
-      <el-form-item label="队伍简介" prop="t_info">
-        <el-input v-model="currentData.t_info"></el-input>
-      </el-form-item>
-      <el-form-item label="最大人数" prop="t_maxnum">
-        <el-input v-model.number="currentData.t_maxnum"></el-input>
-      </el-form-item>
+          <el-form-item label="队长账号" prop="u_acc">
+            <el-input v-model="currentData.u_acc"></el-input>
+          </el-form-item>
+          <el-form-item label="队伍名称" prop="t_name">
+            <el-input v-model="currentData.t_name"></el-input>
+          </el-form-item>
+          <el-form-item label="队伍简介" prop="t_info">
+            <el-input v-model="currentData.t_info"></el-input>
+          </el-form-item>
+          <el-form-item label="最大人数" prop="t_maxnum">
+            <el-input v-model.number="currentData.t_maxnum"></el-input>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="showAddDialog = false">取消</el-button>
           <el-button type="primary" @click="saveB">保存</el-button>
         </div>
       </el-dialog>
-    </div>
-  
-    <div class="table">
+
+
       <el-table :data="tableData" stripe>
-      <el-table-column prop="u_acc" label="队长账号"></el-table-column>
-      <el-table-column prop="t_name" label="队伍名称"></el-table-column>
-      <el-table-column prop="t_info" label="队伍简介"></el-table-column>
-      <el-table-column prop="t_curnum" label="当前人数"></el-table-column>
-      <el-table-column prop="t_maxnum" label="最大人数"></el-table-column>
-      <el-table-column prop="t_status" label="队伍状态">
-        <template #default="{ row }">
-          {{ getStatusText(row.t_status) }}
-        </template>
-      </el-table-column>
+        <el-table-column prop="u_acc" label="队长账号"></el-table-column>
+        <el-table-column prop="t_name" label="队伍名称"></el-table-column>
+        <el-table-column prop="t_info" label="队伍简介"></el-table-column>
+        <el-table-column prop="t_curnum" label="当前人数"></el-table-column>
+        <el-table-column prop="t_maxnum" label="最大人数"></el-table-column>
+        <el-table-column prop="t_status" label="队伍状态">
+          <template #default="{ row }">
+            {{ getStatusText(row.t_status) }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="230">
           <template #default="{ row }">
             <el-button size="default" @click="editB(row)">编辑</el-button>
-            <el-button size="default" @click="deleteB(row)" type="danger">删除</el-button>
-
-            <div>封禁</div>
-            <div>解封</div>
-            <div>解散</div>    
-
-
+            <el-button size="default" @click="deleteB(row)" type="danger" disabled>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-    </div>
-  
-  
-  
-    <div class="edit">
-      <el-dialog title="编辑" v-model="showEditDialog">
-        <el-form :model="currentData" label-width="100px">
-            <el-form-item label="队长账号" prop="u_acc">
-        <el-input v-model="formData.u_acc"></el-input>
-      </el-form-item>
-      <el-form-item label="队伍名称" prop="t_name">
-        <el-input v-model="formData.t_name"></el-input>
-      </el-form-item>
-      <el-form-item label="队伍简介" prop="t_info">
-        <el-input v-model="formData.t_info"></el-input>
-      </el-form-item>
-      <el-form-item label="最大人数" prop="t_maxnum">
-        <el-input v-model.number="formData.t_maxnum"></el-input>
-      </el-form-item>
-        </el-form>
-  
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="showEditDialog = false">取消</el-button>
-          <el-button type="primary" @click="updateB">保存</el-button>
-        </div>
-      </el-dialog>
-    </div>
-  
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue'
-  import baseApi from "@/api/baseUrl.js"
-  import { ElMessage } from 'element-plus';
-  
-  
+
+
+      
+        <el-dialog title="编辑" v-model="showEditDialog">
+          <el-form :model="currentData" label-width="100px">
+            <el-form-item label="队长账号">
+              <el-input v-model="currentData.u_acc" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="队伍名称" >
+              <el-input v-model="currentData.t_name" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="队伍简介" >
+              <el-input v-model="currentData.t_info" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="最大人数">
+              <el-input v-model.number="currentData.t_maxnum" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="队伍状态">
+              <el-select v-model="currentData.t_status">
+                <el-option label="正常" :value="0"></el-option>
+                <el-option label="锁定" :value="1"></el-option>
+                <el-option label="解散" :value="2"></el-option>
+                <el-option label="违规" :value="3"></el-option>
+                <el-option label="管理删除" :value="4"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="showEditDialog = false">取消</el-button>
+            <el-button type="primary" @click="updateB">保存</el-button>
+          </div>
+        </el-dialog>
+
+    </el-main>
+    <el-footer></el-footer>
+  </el-container>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import baseApi from "@/api/baseUrl.js"
+import { ElMessage } from 'element-plus';
+import { ElLoading } from 'element-plus'
+
+
+
 
 // value转换
 function getStatusText(status) {
-      switch (status) {
-        case 0:
-          return '正常';
-        case 1:
-          return '锁定';
-        case 2:
-          return '解散';
-        case 3:
-          return '违规';
-        case 4:
-          return '管理删除';
-        default:
-          return '';
+  switch (status) {
+    case 0:
+      return '正常';
+    case 1:
+      return '锁定';
+    case 2:
+      return '解散';
+    case 3:
+      return '违规';
+    case 4:
+      return '管理删除';
+    default:
+      return '';
+  }
+}
+
+
+
+
+
+
+// 状态控制
+let showEditDialog = ref(false);
+let showAddDialog = ref(false);
+// 数据传递
+let tableData = ref([]);
+let currentData = ref(null);
+const originData = ref({});
+let queryData = ref({});
+
+
+
+// 重置搜索条件
+function resetB() {
+  queryData.value = {};
+  fetch(queryData.value, 1);
+}
+
+// 请求数据
+async function fetch(data, c_page) {
+  vLoading.value = true;
+  console.log('请求数据');
+  console.log(data);
+  data.currentPage = c_page;
+
+  try {
+    const res = await baseApi.post('/admin/queryTeam', {}, { params: data });
+    vLoading.value = false;
+    if (res.code === 200) {
+      tableData.value = res.data.listPage;
+      // 数据处理
+      tableData.value.forEach((item) => {
+        item.u_acc = item.captain.u_acc;
+        delete item.captain;
+      });
+      if (res.data.totalSize === 0) {
+        ElMessage.warning('暂无数据');
       }
     }
-
-
-
-
-
-
-  // 请求数据
-  function fetch(data, page) {
-    data.currentPage = page;
-    baseApi.post('/admin/queryQuery', {}, { params: data })
-      .then(res => {
-        if (res.code === 200) {
-          tableData.value = res.data.listPage;
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        ElMessage.error(err.message);
-      })
+  } catch (err) {
+    console.log(err);
+    ElMessage.error(err.message);
+    vLoading.value = false; // 确保在错误时也更新加载状态  
   }
-  
-  
-  
-  
-  let tableData = ref({});
-  fetch({}, 1);
-  
-  
-  // 状态控制
-  let showEditDialog = ref(false);
-  let showAddDialog = ref(false);
-  
-  // 数据传递
-  let currentData = ref(null);
-  const originData = ref({});
-  
-  
-  // 添加按钮
-  function addB() {
-    currentData.value.p_status = currentData.value.p_status ? true : false;
-    currentData.value = { ...newRow.value };
-    showAddDialog.value = true;
-  };
-  
-  // 保存
-  function saveB() {
-    currentData.value.p_status = currentData.value.p_status ? 1 : 0;
-    baseApi.post('/mentor/add', null, { params: currentData.value }).then(res => {
-      console.log(res);
-      if (res.code === 200) {
-        ElMessage.success(res.message);
-        showAddDialog.value = false;
-      }
-    }).catch(err => {
-      console.log(err);
-      ElMessage.error(err.message);
-    })
+}
+
+
+// 初始化数据
+fetch(queryData.value, 1);
+
+// 添加方法
+function addB() {
+  currentData.value = {};
+  showAddDialog.value = true;
+};
+
+// 保存 
+async function saveB() {
+
+  // 关闭添加框，确保在请求完成后执行  
+  showAddDialog.value = false;
+
+
+  currentData.value.m_status = currentData.value.m_status ? 1 : 0;
+  try {
+    const res = await baseApi.post('/user/add', null, { params: currentData.value });  
+    console.log(res);
+    if (res.code === 200) {
+      console.log(res.message);
+      ElMessage.success(res.message);
+      // 刷新数据  
+      fetch(queryData.value, 1);
+    } else {
+      ElMessage.error("网络速度慢，手动刷新");
+    }
+    
+  } catch (err) {
+    console.log(err);
+    ElMessage.error(err.message || "网络速度慢，手动刷新"); // 如果 err.message 不存在，则显示默认消息  
   }
+}
+
+
+
+
+
+// 编辑方法
+function editB(team) {
+  currentData.value = { ...team };
+  currentData.value.m_status = currentData.value.m_status === 1;
+  originData.value = team;
+  showEditDialog.value = true;
+};
+
+// 保存
+async function updateB() { 
+
+// 假设更新成功后，关闭编辑页面  
+showEditDialog.value = false;    
+  // 发送请求到后端更新队伍信息  
+  console.log('更新');  
+  console.log("old");  
+  console.log(originData.value);  
+  console.log(currentData.value);  
   
-  // 编辑方法
-  function editB(team) {
-    currentData.value = { ...team };
-    currentData.value.status = currentData.value.status === 1;
-    originData.value = team;
-    showEditDialog.value = true;
-  };
-  
-  // 保存
-  function updateB() {
-    // 将true设置为1，false设置为0
-    currentData.value.status = currentData.value.status ? 1 : 0;
-  
-    // 发送请求到后端更新队伍信息
-    console.log('更新');
-    console.log("old");
-    console.log(originData.value);
-    console.log(currentData.value);
-    baseApi.post('/mentor/update', null, { params: currentData.value }).then(res => {
-      console.log(res);
-      if (res.code === 200) {
-        ElMessage.success(res.message);
-        // 假设更新成功后，关闭添加页面
-        showEditDialog.value = false;
-      }
-    }).catch(err => {
-      console.log(err);
-      ElMessage.error(err.message);
-    })
-  
-    // 重新加载队伍列表
-    fetch({}, 1);
+  try {  
+    const res = await baseApi.post('/user/UpdateTeam',  null, { params: currentData.value });
+    console.log(res);  
+    if (res.code === 200) {  
+      ElMessage.success(res.message);  
+      // 重新加载队伍列表  
+      await fetch(queryData.value, 1); // 假设fetch返回Promise  
+    }  
+  } catch (err) {  
+    console.log(err);  
+    ElMessage.error(err.message || '更新失败，请重试');  
+  }  
+}
+
+async function deleteB(oldData) {
+  // 发送删除请求前，显示加载状态  
+  vLoading.value = true;
+
+  try {
+    // 注意：如果 oldData 是请求参数，通常应该放在请求体中，而不是作为 params  
+    // 但这取决于您的后端 API 设计  
+    const res = await baseApi.post('/user/delete', null, { params: oldData }); // 假设 oldData 是请求体  
+
+    // 请求完成后，隐藏加载状态  
+    vLoading.value = false;
+
+    console.log(res);
+    if (res.code === 200) {
+      ElMessage.success(res.message);
+      // 删除成功后，重新加载数据  
+      fetch(queryData.value, 1);
+    }
+  } catch (err) {
+    // 请求发生错误时，隐藏加载状态（如果需要）  
+    vLoading.value = false;
+    console.log(err);
+    ElMessage.error(err.message || '删除失败，请重试');
   }
-  
-  
-  // 删除数据
-  function deleteB(oldData) {
-    // 发送删除
-    baseApi.post('/mentor/delete', null, { params: oldData }).then(res => {
-      console.log(res);
-      if (res.code === 200) {
-        ElMessage.success(res.message);
-        // 假设删除成功后，关闭添加页面
-        showEditDialog.value = false;
-      }
-    }).catch(err => {
-      console.log(err);
-      ElMessage.error(err.message);
-    })
-  
-    // 重新请求数据
-    fetch({}, 1);
-  
-  
-  }
-  
-  
-  
-  
-  </script>
+}
+</script>

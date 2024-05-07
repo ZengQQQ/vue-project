@@ -1,5 +1,8 @@
 <template>
+    <div>
 
+      <h1>开发中</h1>
+    </div>
     <div class="add">
       <el-button type="primary" plain @click="addB">添加</el-button>
       <el-dialog title="添加比赛" v-model="showAddDialog">

@@ -1,34 +1,8 @@
-<template>
-  <el-container>
-    <el-header>
-      <el-form :model="queryData">
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <el-form-item label="账号">
-              <el-input v-model.trim="queryData.u_acc"></el-input>
-            </el-form-item></el-col>
-          <el-col :span="6">
-            <el-form-item label="名称">
-              <el-input v-model.trim="queryData.u_name"></el-input>
-            </el-form-item></el-col>
-          <el-col :span="6">
-            <el-button type="primary" @click="fetch(queryData, 1)">搜索</el-button>
-            <el-button type="text" @click="resetB">reset</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-header>
-    <el-main>
-      
-    </el-main>
-    <el-footer></el-footer>
-  </el-container>
-</template>
 
-<script setup>
 import { ref } from 'vue'
 import baseApi from "@/api/baseUrl.js"
 import { ElMessage } from 'element-plus';
+import { ElLoading } from 'element-plus'
 
 
 // 状态控制
@@ -42,6 +16,12 @@ let queryData = ref({});
 
 
 
+// 重置搜索条件
+function resetB() {
+  queryData.value = {};
+  fetch(queryData.value, 1);
+}
+
 // 请求数据
 async function fetch(data, c_page) {
   vLoading.value = true;
@@ -50,7 +30,7 @@ async function fetch(data, c_page) {
   data.currentPage = c_page;
 
   try {
-    const res = await baseApi.post('/admin/queryStudent', {}, { params: data });
+    const res = await baseApi.post('/admin/queryUser', {}, { params: data });
     vLoading.value = false;
     if (res.code === 200) {
       tableData.value = res.data.listPage;
@@ -89,7 +69,7 @@ async function saveB() {
 
   currentData.value.m_status = currentData.value.m_status ? 1 : 0;
   try {
-    const res = await baseApi.post('/student/add', null, { params: currentData.value });  
+    const res = await baseApi.post('/user/add', null, { params: currentData.value });  
     console.log(res);
     if (res.code === 200) {
       console.log(res.message);
@@ -124,8 +104,6 @@ async function updateB() {
 // 假设更新成功后，关闭编辑页面  
 showEditDialog.value = false;  
 
-  // 将true设置为1，false设置为0  
-  currentData.value.m_status = currentData.value.status ? 1 : 0;  
   
   // 发送请求到后端更新队伍信息  
   console.log('更新');  
@@ -134,7 +112,7 @@ showEditDialog.value = false;
   console.log(currentData.value);  
   
   try {  
-    const res = await baseApi.post('/student/update',  null, { params: currentData.value });
+    const res = await baseApi.post('/user/update',  null, { params: currentData.value });
     console.log(res);  
     if (res.code === 200) {  
       ElMessage.success(res.message);  
@@ -154,7 +132,7 @@ async function deleteB(oldData) {
   try {
     // 注意：如果 oldData 是请求参数，通常应该放在请求体中，而不是作为 params  
     // 但这取决于您的后端 API 设计  
-    const res = await baseApi.post('/student/delete', null, { params: oldData }); // 假设 oldData 是请求体  
+    const res = await baseApi.post('/user/delete', null, { params: oldData }); // 假设 oldData 是请求体  
 
     // 请求完成后，隐藏加载状态  
     vLoading.value = false;
@@ -172,8 +150,3 @@ async function deleteB(oldData) {
     ElMessage.error(err.message || '删除失败，请重试');
   }
 }
-
-
-
-
-</script>

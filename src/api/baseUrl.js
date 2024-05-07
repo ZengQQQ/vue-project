@@ -4,9 +4,6 @@ import { ElMessage } from "element-plus";
 import { useTokenStore } from "@/stores/token.js";
 import router from "@/router";
 
-// 刷新页面
-import { inject } from "vue";
-const reload = inject("reload");
 
 const baseApi = axios.create({
   baseURL: "http://localhost:8080/",
@@ -59,11 +56,8 @@ baseApi.interceptors.response.use(
   },
   (error) => {
     // 对响应错误做点什么
-    console.log("http error:");
-    console.log(error);
-    () => {
-      reload();
-    };
+    // console.log("http error:");
+    // console.log(error);
     //判断响应错误，401代表未授权
     if (error.response.status === 401) {
       ElMessage.error("请先登录");
