@@ -97,7 +97,7 @@ const handleCommand = (command) => {
             <el-icon>
               <Crop />
             </el-icon>
-            <span>我的工作</span>
+            <span>我的项目</span>
           </el-menu-item>
          
           <el-menu-item index="1-4"  route="/work/workInform">

@@ -6,7 +6,7 @@ export const getUserInfoService = () => {
 };
 
 export const updateUserInfoService = (params) => {
-    return baseApi.post("/user/UpdateUser",null,{params: params});
+    return baseApi.post("/user/update",null,{params: params});
 };
 
 
@@ -17,8 +17,3 @@ export const getStudents = (params) => {
 export const getTeachers = (params) => {
     return baseApi.post("/admin/queryUser", null,{params: params});
 };
-
-
-export const updatePasswordService = (params) => {
-    return baseApi.post("/user/updatePassword",null,{params: params});
-}
