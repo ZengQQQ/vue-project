@@ -17,3 +17,8 @@ export const getStudents = (params) => {
 export const getTeachers = (params) => {
     return baseApi.post("/admin/queryUser", null,{params: params});
 };
+
+
+export const updatePasswordService = (params) => {
+    return baseApi.post("/user/updatePassword",null,{params: params});
+}
