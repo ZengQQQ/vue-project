@@ -24,6 +24,8 @@ const routes = [
       //workcenter
       {path:'/work/workGround',component:()=>import('@/components/workcenter/WorkGround.vue'),meta:{requiresAuth:false}},
       {path:'/work/workInform',component:()=>import('@/components/workcenter/WorkInform.vue'),meta:{requiresAuth:false}},
+      {path:'/work/workInform/invite',component:()=>import('@/components/workcenter/WorkInformInvitation.vue'),meta:{requiresAuth:false}},
+      {path:'/work/workInform/receive',component:()=>import('@/components/workcenter/WorkInformReceive.vue'),meta:{requiresAuth:false}},
       {path:'/work/workList',component:()=>import('@/components/workcenter/WorkList.vue'),meta:{requiresAuth:false}},
       {path:'/work/workManage',component:()=>import('@/components/workcenter/WorkManage.vue'),meta:{requiresAuth:false}},
 
