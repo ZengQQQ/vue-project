@@ -28,7 +28,7 @@ export const createJob = (params) => {
 
 // 删除工作
 export const deleteJob = (params) => {
-    return baseApi.post("/work/delete", params)
+    return baseApi.post("/user/CloseProject", null,{params: params});
     }
 
 
