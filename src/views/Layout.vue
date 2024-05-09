@@ -20,6 +20,8 @@ const tokenStore = useTokenStore();
 // getUserInfo();
 
 const userInfoStore = useUserInfoStore();
+console.log("userInfoStore")
+console.log(userInfoStore.info)
 
 //条目被点击后,调用的函数
 import { useRouter } from "vue-router";
@@ -97,14 +99,21 @@ const handleCommand = (command) => {
             <el-icon>
               <Crop />
             </el-icon>
-            <span>我的工作</span>
+            <span>我的项目</span>
           </el-menu-item>
          
-          <el-menu-item index="1-4"  route="/work/workInform">
+          <el-menu-item index="1-4"  route="/work/workInform/project">
             <el-icon>
               <EditPen />
             </el-icon>
             <span>工作通知</span>
+          </el-menu-item>
+
+          <el-menu-item index="1-5"  route="/work/workInform/mentor" v-if="userInfoStore.info.u_identity===1">
+            <el-icon>
+              <EditPen />
+            </el-icon>
+            <span>导师消息</span>
           </el-menu-item>
         </el-sub-menu>
 
