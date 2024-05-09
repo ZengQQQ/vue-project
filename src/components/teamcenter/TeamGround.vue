@@ -53,6 +53,16 @@
       <p><strong>队伍人数：</strong>{{ selectedTeam.t_curnum }}/{{ selectedTeam.t_maxnum }}</p>
     </div>
   </el-dialog>
+
+  <!-- 填写申请理由 -->
+  <el-dialog v-model="reasonDialogVisible" title="填写申请理由">
+    <el-input v-model="reason" placeholder="请输入申请理由" />
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="reasonDialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="sendApplyMessage">确 定</el-button>
+    </span>
+  </el-dialog>
+
 </template>
 
 <script setup>
@@ -82,6 +92,10 @@ const searchCriteria = ref({
 
 // 队伍数据
 const teams = ref([]);
+//申请理由
+const reason = ref('');
+const reasonDialogVisible = ref(false);
+const templateTeam = ref(null);
 
 const fetchTeams = async () =>{
   const data = await fetchAllTeamList({
@@ -141,11 +155,23 @@ const resetSearch = async () => {
 
 // 申请加入事件处理程序
 const applyToJoin = (team) => {
-  console.log('申请加入：', team);
+  //填写申请理由
+  reasonDialogVisible.value = true;
+  templateTeam.value = team;
+};
+
+// 发送申请理由
+const sendApplyMessage = () => {
+  if (!reason.value) {
+    ElMessage.error('请填写申请理由');
+    return;
+  }
   // 进行相应的操作，比如弹出确认对话框或发送申请请求
    joinTeam({
+    t_id:templateTeam.value.t_id,
     u_acc:userInfoStore.info.u_acc,
-    t_id:team.t_id,
+    tsm_info:reason.value,
+    tsm_dct:1,
   })
     .then((res) => {
       if (res.code === 200) {
@@ -158,7 +184,12 @@ const applyToJoin = (team) => {
     .catch((error) => {
       ElMessage.error('申请失败');
     });
+
+  // 重置申请理由
+  reason.value = '';
+  reasonDialogVisible.value = false;
 };
+
 
 // 判断队伍是否已满员
 const isTeamFull = (team) => {

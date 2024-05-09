@@ -39,12 +39,9 @@ export const updateJob = (params) => {
 }
 
 //申请工作
-export const applyWorkWithTeam = (job,team) => {
-    params = {
-        job: job,
-        team: team
-    }
-    return baseApi.post("/work/apply",null,{params: params})
+export const applyWorkWithTeam = (params) => {
+    console.log("applyWorkWIthTeam",params);
+    return baseApi.post("/user/ProjectTeamMessageSend",null,{params:params});
 }
 
 
@@ -93,7 +90,7 @@ export const getMyManagedStalls = (params) => {
 }
 
 export const getMyParticipatedStalls = (params) => {
-    return baseApi.post("/admin/queryJoinedStall",null,{params: params});
+    return baseApi.post("/user/queryJoinedStall",null,{params: params});
 }
 
 export const updateStallInfo = (newStallInfo,oldStallInfo) => {

@@ -295,10 +295,35 @@ const editTeam = (team) => {
 };
 
 
-const dismissTeam = (team) => {
+const dismissTeam = async (team) => {
   // 解散队伍
-  alert(`解散队伍: ${team.name}`);
-  deleteTeam(team);
+  await ElMessageBox.confirm("确定要解散队伍吗？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      // 用户点击了确定按钮
+      deleteTeam({
+        t_id: team.t_id,
+      })
+        .then((res) => {
+          if (res.code === 200) {
+            ElMessage.success("解散成功");
+            fetchJoinedTeams();
+            fetchMyTeams();
+          } else {
+            ElMessage.error(res.message ? res.message : "解散失败");
+          }
+        })
+        .catch((error) => {
+          ElMessage.error("解散失败");
+        });
+    })
+    .catch(() => {
+      // 用户点击了取消按钮
+      ElMessage.info("用户取消了解散操作");
+    });
 };
 
 
@@ -314,6 +339,7 @@ const leaveTeam = async (team) => {
   const data = await quitTeam({
     t_id: team.t_id,
     u_acc: userInfoStore.info.u_acc,
+    join_status: 2,
   });
 
   if (data.code === 200) {
@@ -360,6 +386,7 @@ const kickMember = async (member) => {
     const data = await deleteTeamMember({
       t_id: currentTeam.value.t_id,
       u_acc: member.u_acc,
+      join_status: 2,
     });
     if (data.code === 200) {
       ElMessage.success("踢出成功");

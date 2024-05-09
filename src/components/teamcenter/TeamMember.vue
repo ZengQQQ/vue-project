@@ -65,7 +65,7 @@ import { onMounted, ref } from "vue";
 import { getStudents, getTeachers } from "@/api/user.js";
 import { ElMessage } from "element-plus";
 import { useUserInfoStore } from "@/stores/userInfo.js";
-import { fetchPersonTeamList,sendInvitationToTeam } from "@/api/team";
+import { fetchPersonTeamList,sendInvitationToTeam,sendInvitationMentorToTeam } from "@/api/team";
 
 const userInfoStore = useUserInfoStore();
 
@@ -124,22 +124,45 @@ const inviteMember = (member) => {
 const sendInvitation = async () => {
   // 假设有一个API方法 sendInvite 来处理邀请逻辑
   try {
-    const response = await sendInvitationToTeam({
+    
+    if(selectedMember.value.u_acc === userInfoStore.info.u_acc){
+      ElMessage.error("不能邀请自己");
+      return;
+    }
+
+    const response = ref(null);
+
+    if(selectedMember.value.u_identity === 1){
+      //邀请导师
+      response.value = await sendInvitationMentorToTeam({
+        t_id: selectedTeam.value,
+        u_acc: selectedMember.value.u_acc,
+        tsm_info: invitationMessage.value,  // 使用用户填写的申请理由
+        tsm_dct: 0,  // 0表示邀请
+      });
+    }else{
+      //邀请学生
+      console.log("selectedTeam.value",selectedTeam.value);
+    response.value = await sendInvitationToTeam({
       t_id: selectedTeam.value,
       u_acc: selectedMember.value.u_acc,
       tsm_info: invitationMessage.value,  // 使用用户填写的申请理由
-      tsm_dct: "0",  // 0表示邀请
+      tsm_dct: 0,  // 0表示邀请
     });
-    if (response.code === 200) {
+    }
+
+    if (response.value.code === 200) {
       ElMessage.success("邀请发送成功");
-      invitationMessage.value = '';  // 清空申请理由输入框
     } else {
       ElMessage.error(response.message || "邀请发送失败");
     }
   } catch (error) {
-    console.error("Error sending invitation:", error);
-    ElMessage.error("邀请发送失败");
   }
+  //清空邀请信息
+  selectedMember.value = null;
+  selectedTeam.value = null;
+  invitationMessage.value = '';
+
   showModal.value = false; // 关闭模态框
 };
 

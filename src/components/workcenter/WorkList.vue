@@ -310,7 +310,7 @@ const getLevelText = (level) => {
             label-align="right"
             align="center"
           >
-            {{ item.teamFix.captain }}
+            {{ item.teamFix.captain.u_name }}
           </el-descriptions-item>
           <el-descriptions-item
             label="指导老师"

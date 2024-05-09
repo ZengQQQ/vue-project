@@ -55,6 +55,9 @@ export default {
 
     const userInfoStore = useUserInfoStore();
 
+    // 申请理由
+    const reason = ref("");
+    
     // 模拟获取工作数据的API调用
     const fetchJobs = async () => {
       // 替换为实际的API请求
@@ -131,7 +134,6 @@ export default {
         const data = await fetchPersonTeamList({u_acc:userInfoStore.info.u_acc});
         teams.value = data.data.listPage;
         teamTotalPage.value = data.data.totalPage;
-        console.log("teams",teams.value);
       } catch (error) {
         console.error("Error fetching teams:", error);
       }
@@ -141,6 +143,7 @@ export default {
 
     // 申请工作
     const applyForJob = async () => {
+      reason.value = ""; // Reset the reason input
       //首先获取团队列表
       await fetchTeams();
       //判断是否有团队
@@ -171,7 +174,12 @@ export default {
         return;
       }
       try {
-        await applyWorkWithTeam(selectedJob.value, selectedTeam.value);
+        await applyWorkWithTeam({
+          t_id: selectedTeam.value, 
+          p_id: selectedJob.value.p_id,
+          tp_dct:1,
+          tp_info: reason.value,
+        });
         showTeamsDialog.value = false; // 关闭团队列表对话框
         teamPage.value = 1; // Reset the team page number
         hasMoreTeams.value = true; // Reset the flag for more teams
@@ -241,6 +249,7 @@ const formatDate = (dateString) => {
       teams,
       showTeamsDialog,
       selectedTeam,
+      reason,
       applyForJob,
       confirmTeamAndApply,
 
@@ -380,6 +389,13 @@ hasMoreTeams,
       >
       </el-option>
     </el-select>
+    <span>请输入您的申请信息：</span>
+    <!-- 文字框输入 -->
+    <el-input
+      type="textarea"
+      v-model="reason"
+      placeholder="请输入申请信息"
+    ></el-input>
     <el-button @click="confirmTeamAndApply">确认</el-button>
     <el-button @click="showTeamsDialog = false">取消</el-button>
     <el-button @click="loadMoreTeams" v-show="hasMoreTeams">加载更多</el-button>

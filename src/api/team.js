@@ -16,15 +16,16 @@ export const fetchSearchTeamList = (params) => {
   return baseApi.get("/team/search",null,{params: params});
 }
 
-//加入团队接口
+//申请加入团队接口
 export const joinTeam = (params) => {
-  return baseApi.post("/team/join",null,{params:params});
+  console.log(params);
+  return baseApi.post("/user/TeamMessageSend",null,{params:params});
 }
 
 
 //获取自己所在团队，但是不是队长
 export const fetchMemberTeamList = (params) => {
-  return baseApi.post("/admin/queryJoinedTeam",null,{params:params});
+  return baseApi.post("/user/queryJoinedTeam",null,{params:params});
 }
 
 //创建队伍
@@ -35,6 +36,7 @@ export const createNewTeam = (params)=>{
 
 //退出团队
 export const quitTeam = (params) => {
+  console.log("quitTeam",params);
   return baseApi.post("/user/TeamMessageApproval",null,{params:params});
 }
 
@@ -45,13 +47,14 @@ export const updateTeamInfo = (params) => {
 }
 
 //解散团队
-export const deleteTeam = (teamInfo) => {
-  return baseApi.post("/team/delete",teamInfo)
+export const deleteTeam = (params) => {
+  console.log("deleteTeam",params);
+  return baseApi.post("/user/DissolveTeam",null,{params:params});
 }
 
 //删除团队成员
 export const deleteTeamMember = (params) => {
-  return baseApi.post("/user/TeamMessageApproval",null,{params:params});
+  return baseApi.post("user/TeamMessageApproval",null,{params:params});
 }
 
 
@@ -83,6 +86,13 @@ export const refuseJoinTeam = (userInfo,teamInfo) => {
   return baseApi.post("/team/refuseJoin",params)
 }
 
+//发送学生邀请加入团队
 export const sendInvitationToTeam = (params) => {
+  console.log("studentInvite",params);
   return baseApi.post("/user/TeamMessageSend",null,{params:params});
+}
+//发送邀请导师加入
+export const sendInvitationMentorToTeam = (params) => {
+  console.log("mentorInvite",params);
+  return baseApi.post("/user/MentorTeamMessageSend",null,{params:params});
 }
