@@ -36,12 +36,12 @@
             <span>房间管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="4-1" route="/admin/stall">房间</el-menu-item>
+            <el-menu-item index="4-1" route="/admin/stall">房间（“合同”）</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group title="房间消息">
-            <el-menu-item index="4-2" route="/admin/smmessage">导师消息</el-menu-item>
-            <el-menu-item index="4-3" route="/admin/spmessage">比赛消息</el-menu-item>
-            <el-menu-item index="4-4" route="/admin/stmessage">队伍消息</el-menu-item>
+            <el-menu-item index="4-2" route="/admin/smmessage">队伍导师</el-menu-item>
+            <el-menu-item index="4-3" route="/admin/spmessage">队伍项目</el-menu-item>
+            <el-menu-item index="4-4" route="/admin/stmessage" v-if="false">队伍消息</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
         <el-sub-menu index="5">
