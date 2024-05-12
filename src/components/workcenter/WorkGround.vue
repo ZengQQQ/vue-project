@@ -174,18 +174,31 @@ export default {
         return;
       }
       try {
-        await applyWorkWithTeam({
+        const data = await applyWorkWithTeam({
           t_id: selectedTeam.value, 
           p_id: selectedJob.value.p_id,
           tp_dct:1,
           tp_info: reason.value,
         });
+        if(data.code === 200){
+          ElMessage({
+            type: "success",
+            message: "申请成功",
+          });
+        
         showTeamsDialog.value = false; // 关闭团队列表对话框
+        detailDialogVisible.value = false; // 关闭工作详情对话框
         teamPage.value = 1; // Reset the team page number
         hasMoreTeams.value = true; // Reset the flag for more teams
+         }
+            else{
+          ElMessage({
+            type: "error",
+            message: data.message?data.message:"申请失败",
+          });
+        }
         // 可以在这里添加申请成功后的逻辑，比如显示提示信息等
       } catch (error) {
-        console.error("Error applying for job with team:", error);
       }
     };
     // 初始加载数据

@@ -233,6 +233,7 @@ import {
   ElOption,
   ElDatePicker,
   ElMessage,
+  ElMessageBox,
 } from "element-plus";
 import { useUserInfoStore } from "@/stores/userInfo.js";
 import { createJob, updateJob, deleteJob,fetchMyJobs } from "@/api/work.js";
@@ -366,7 +367,16 @@ const updateProject = async() => {
 
 
 const deleteProject = async(project) => {
-  const data  = await deleteJob(project);
+  //添加确认框
+  ElMessageBox.confirm('此操作将永久删除该项目, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(async () => {
+    // 确认删除
+    const data  = await deleteJob({
+    p_id: project.p_id,
+  });
     if(data.code === 200){
       // 删除项目成功后刷新项目列表
       ElMessage.success(data.message?data.message:'删除项目成功');
@@ -374,6 +384,11 @@ const deleteProject = async(project) => {
     }else{
       ElMessage.error(data.message?data.message:'删除项目失败');
     }
+  }).catch(() => {
+    // 取消删除
+    ElMessage.info('已取消删除');
+  });
+
 };
 
 const fetchProjects = async() => {

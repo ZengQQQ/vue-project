@@ -24,13 +24,13 @@
                   </p>
                 </el-row>
 
-                <el-row><p v-if="notification.tsm_pass === '0'">
+                <el-row><p v-if="notification.tsm_pass === 0">
                     状态：待处理
                 </p>
-                <p v-else-if="notification.tsm_pass === '1'">
+                <p v-else-if="notification.tsm_pass === 1">
                     状态：已同意
                 </p>
-                <p v-else-if="notification.tsm_pass === '2'">
+                <p v-else-if="notification.tsm_pass === 2">
                     状态：已拒绝
                 </p>
             </el-row>
@@ -60,18 +60,20 @@
                         申请信息：{{ notification.tsm_info }}
                     </p>
                 </el-row>
-                <el-row><p v-if="notification.tsm_pass === '0'">
+                <el-row><p v-if="notification.tsm_pass === 0">
                     状态：待处理
-                </p><p v-else-if="notification.tsm_pass === '1'">
+                </p><p v-else-if="notification.tsm_pass === 1">
                     状态：已同意
-                </p><p v-else-if="notification.tsm_pass === '2'">
+                </p><p v-else-if="notification.tsm_pass === 2">
                     状态：已拒绝
                 </p></el-row>
 
                 <el-row><p>
                     <el-button @click="handleApplySenter(notification)" link>查看申请人详情</el-button>
                 </p>
-                <p v-if="notification.tsm_pass === '0'">
+                </el-row>
+            <el-row>
+                <p v-if="notification.tsm_pass === 0">
                     <el-button @click="handleApprove(notification)" type="primary">同意</el-button>
                     <el-button @click="handleReject(notification)" type="danger">拒绝</el-button>
                 </p>
@@ -104,13 +106,13 @@
               </p>
             </el-row>
             <el-row>
-                <p v-if="notification.tsm_pass === '0'">
+                <p v-if="notification.tsm_pass === 0">
                     状态：待处理
                 </p>
-                <p v-else-if="notification.tsm_pass === '1'">
+                <p v-else-if="notification.tsm_pass === 1">
                     状态：已同意
                 </p>
-                <p v-else-if="notification.tsm_pass === '2'">
+                <p v-else-if="notification.tsm_pass === 2">
                     状态：已拒绝
                 </p>
             </el-row>
@@ -147,13 +149,13 @@
                 </p>
             </el-row>
             <el-row>
-                <p v-if="notification.tsm_pass === '0'">
+                <p v-if="notification.tsm_pass === 0">
                     状态：待处理
                 </p>
-                <p v-else-if="notification.tsm_pass === '1'">
+                <p v-else-if="notification.tsm_pass === 1">
                     状态：已同意
                 </p>
-                <p v-else-if="notification.tsm_pass === '2'">
+                <p v-else-if="notification.tsm_pass === 2">
                     状态：已拒绝
                 </p>
             </el-row>
@@ -164,7 +166,9 @@
                 <p>
                     <el-button @click="handleTeam(notification)" link>查看详情</el-button>
                 </p>
-                <p v-if="notification.tsm_pass === '0'">
+            </el-row>
+            <el-row>
+                <p v-if="notification.tsm_pass === 0">
                     <el-button @click="handleApprove(notification)" type="primary">同意</el-button>
                     <el-button @click="handleReject(notification)" type="danger">拒绝</el-button>
                 </p>
@@ -266,7 +270,7 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
-  import { ElTabs, ElTabPane, ElCard, ElButton } from 'element-plus';
+  import { ElTabs, ElTabPane, ElCard, ElButton, ElMessage } from 'element-plus';
   import { fetchTeamCaptainApplication, fetchTeamMemberApplication, agreeJoinTeam, refuseJoinTeam } from "@/api/team.js";
   import { useUserInfoStore } from '@/stores/userInfo.js';
   
@@ -302,8 +306,8 @@
   
       if (memData.code === 200) {
         // 根据不同的 tsm_dct 筛选队员发送的申请和收到的邀请
-        memberSentApplications.value = memData.data.listPage.filter(notification => notification.tsm_dct === '0');
-        memberReceivedInvitations.value = memData.data.listPage.filter(notification => notification.tsm_dct === '1');
+        memberSentApplications.value = memData.data.listPage.filter(notification => notification.tsm_dct === 1);
+        memberReceivedInvitations.value = memData.data.listPage.filter(notification => notification.tsm_dct === 0);
       }
     } catch (error) {
       console.error('Error fetching team notifications:', error);
@@ -312,13 +316,32 @@
   
   const handleApprove = async (notification) => {
     // 处理同意申请逻辑
-    await agreeJoinTeam(notification.id);
+    const data = await agreeJoinTeam({
+      t_id: notification.teamFix.t_id,
+      u_acc: notification.user.u_acc,
+      tsm_pass: 1,
+    });
+    if(data.code === 200){
+      ElMessage.success('操作成功');
+    }else{
+      ElMessage.error(data.message ? data.message : '操作失败');
+    }
     loadNotifications();
   };
     
   const handleReject = async (notification) => {
     // 处理拒绝申请逻辑
-    await refuseJoinTeam(notification.id);
+    const data = await refuseJoinTeam({
+      t_id: notification.teamFix.t_id,
+      u_acc: notification.user.u_acc,
+      tsm_pass: 2,
+    });
+    if(data.code === 200){
+      ElMessage.success('操作成功');
+    }else{
+      ElMessage.error(data.message ? data.message : '操作失败');
+    }
+
     loadNotifications();
   };
   
@@ -369,6 +392,7 @@
     teamInfo.value = notification.teamFix;
     viewTeamDialog.value = true;
   };
+
 
 
 

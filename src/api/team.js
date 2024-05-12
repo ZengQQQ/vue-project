@@ -54,6 +54,7 @@ export const deleteTeam = (params) => {
 
 //删除团队成员
 export const deleteTeamMember = (params) => {
+  console.log("deleteTeamMember",params);
   return baseApi.post("user/TeamMessageApproval",null,{params:params});
 }
 
@@ -70,20 +71,13 @@ export const fetchTeamMemberApplication = (params) => {
 }
 
 //同意加入团队
-export const agreeJoinTeam = (userInfo,teamInfo) => {
-  const params = {
-    userInfo:userInfo,
-    teamInfo:teamInfo
-  }
-  return baseApi.post("/team/agreeJoin",params)
+export const agreeJoinTeam = (params) => {
+  console.log("agreeJoinTeam",params);
+  return baseApi.post("/user/TeamMessageApproval",null,{params:params});
 }
 //拒绝加入团队
-export const refuseJoinTeam = (userInfo,teamInfo) => {
-  const params = {
-    userInfo:userInfo,
-    teamInfo:teamInfo
-  }
-  return baseApi.post("/team/refuseJoin",params)
+export const refuseJoinTeam = (params) => {
+  return baseApi.post("/user/TeamMessageApproval",null,{params:params});
 }
 
 //发送学生邀请加入团队

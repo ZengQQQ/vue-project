@@ -399,7 +399,6 @@ const kickMember = async (member) => {
     }
   } catch (error) {
     // 用户取消操作或者其他错误
-    ElMessage.info("用户取消了踢出操作");
   }
 };
 

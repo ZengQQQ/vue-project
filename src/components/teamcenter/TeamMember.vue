@@ -129,7 +129,6 @@ const sendInvitation = async () => {
       ElMessage.error("不能邀请自己");
       return;
     }
-
     const response = ref(null);
 
     if(selectedMember.value.u_identity === 1){
