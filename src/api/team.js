@@ -3,12 +3,12 @@ import baseApi from "@/api/baseUrl";
 
 //获取本人作为队长的团队
 export const fetchPersonTeamList = (params) => {
-  return baseApi.post("/admin/queryTeam", null,{params: params});
+  return baseApi.post("/user/queryTeam", null,{params: params});
 }
 
 //获取所有团队
 export const fetchAllTeamList = () => {
-  return baseApi.post("/admin/queryTeam",null,{params:{}});
+  return baseApi.post("/user/queryTeam",null,{params:{}});
 }
 
 //搜索特定团队

@@ -2,11 +2,11 @@ import baseApi  from "@/api/baseUrl";
 
 // 获取工作列表
 export const getWorkList = () => {
-  return baseApi.get("/admin/queryProject",null,{params: {}})
+  return baseApi.get("/user/queryProject",null,{params: {}})
 }
 
 export const getWorkListCondition = (params) =>{
-    return baseApi.post('/admin/queryProject',null,{params:params});
+    return baseApi.post('/user/queryProject',null,{params:params});
 }
 
 //获取个人所在队伍承接工作列表
@@ -17,7 +17,7 @@ export const getWorkListByUser = (params) => {
 /*workManagement*/
 // 创建新工作
 export const fetchMyJobs= (params)  => {
-    return baseApi.post("/admin/queryProject",null,{params:params});
+    return baseApi.post("/user/queryProject",null,{params:params});
 }
 
 
@@ -86,7 +86,7 @@ export const refuseWorkApply = (params) => {
 
 /**自己管理的房间，和别人管理的房间，这里组队承接之后就得到了房间 */
 export const getMyManagedStalls = (params) => {
-    return baseApi.post("/admin/queryStall",null,{params: params});
+    return baseApi.post("/user/queryStall",null,{params: params});
 }
 
 export const getMyParticipatedStalls = (params) => {
